@@ -5,6 +5,10 @@
 
 @layer theme, base, components, utilities ;
 
+:root {
+  --ui-primary: var(--color-cyan-500);
+}
+
 /* @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/preflight.css" layer(base);
 @import "tailwindcss/utilities.css" layer(utilities); */

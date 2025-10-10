@@ -9,7 +9,7 @@
           <h1
             class="neo-glow text-3xl md:text-4xl font-extrabold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-500">
 
-            系统功能面板
+            数据引接功能面板
           </h1>
           <UIcon name="i-lucide-cpu" class="i-lucide-cpu size-6 ml-3 text-cyan-400 animate-pulse"></UIcon>
         </div>
@@ -22,9 +22,9 @@
       <u-tabs :items variant="link" orientation="horizontal"> </u-tabs>
       <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 flex-1"> -->
       <div>
-        <UTooltip text="Open on GitHub">
+        <!-- <UTooltip text="Open on GitHub">
           <UButton icon="i-lucide-wifi" label="Show toast" color="primary" variant="outline" @click="showToast" />
-        </UTooltip>
+        </UTooltip> -->
       </div>
 
       <!-- <div>
@@ -74,7 +74,7 @@
       description: 'There was a problem with your request.',
       icon: 'i-lucide-wifi',
       progress: false,
-      color: 'success'
+      color: 'primary'
     })
   }
 </script>

@@ -53,7 +53,7 @@ export default defineNuxtConfig({
     fonts: false,
     theme: {
       defaultVariants: {
-        color: 'success',
+        color: 'primary',
         size: 'md'
       }
     }
