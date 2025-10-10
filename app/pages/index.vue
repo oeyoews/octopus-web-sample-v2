@@ -5,16 +5,16 @@
       <!-- heading -->
       <header class="mb-8 text-center select-none">
         <div class="inline-flex items-center justify-center">
-          <UIcon name="i-lucide-cpu" class="i-lucide-cpu size-6 mr-3 text-emerald-400 animate-pulse"></UIcon>
+          <UIcon name="i-lucide-cpu" class="i-lucide-cpu size-6 mr-3 text-cyan-400 animate-pulse"></UIcon>
           <h1
-            class="neo-glow text-3xl md:text-4xl font-extrabold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-lime-400 to-green-600">
+            class="neo-glow text-3xl md:text-4xl font-extrabold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-500">
 
             系统功能面板
           </h1>
-          <UIcon name="i-lucide-cpu" class="i-lucide-cpu size-6 ml-3 text-emerald-400 animate-pulse"></UIcon>
+          <UIcon name="i-lucide-cpu" class="i-lucide-cpu size-6 ml-3 text-cyan-400 animate-pulse"></UIcon>
         </div>
         <div
-          class="h-0.5 w-48 mx-auto mt-4 bg-gradient-to-r from-transparent via-emerald-400/60 to-transparent blur-[1px]">
+          class="h-0.5 w-48 mx-auto mt-4 bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent blur-[1px]">
         </div>
       </header>
 
@@ -84,10 +84,10 @@
     position: relative;
     overflow: hidden;
     background:
-      radial-gradient(1200px 600px at 80% -10%, rgba(16, 185, 129, 0.14), transparent 60%),
-      /* emerald-500 */
-      radial-gradient(800px 400px at -10% 20%, rgba(132, 204, 22, 0.10), transparent 60%),
-      /* lime-500 */
+      radial-gradient(1200px 600px at 80% -10%, rgba(34, 211, 238, 0.14), transparent 60%),
+      /* cyan-400 */
+      radial-gradient(800px 400px at -10% 20%, rgba(59, 130, 246, 0.12), transparent 60%),
+      /* blue-500 */
       linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0));
   }
 
@@ -105,6 +105,6 @@
 
   .neo-glow {
     position: relative;
-    text-shadow: 0 0 18px rgba(16, 185, 129, 0.35), 0 0 36px rgba(132, 204, 22, 0.25);
+    text-shadow: 0 0 18px rgba(34, 211, 238, 0.35), 0 0 36px rgba(99, 102, 241, 0.25);
   }
 </style>
