@@ -1,0 +1,18 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+/* @layer theme, base, components, utilities ;
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css" layer(utilities); */
+
+/* 支持黑暗模式 */
+/* @custom-variant dark (&:where(.dark, .dark *)); */
+
+/* :root {
+  --ui-primary: var(--ui-color-primary-700);
+}
+
+.dark {
+  --ui-primary: var(--ui-color-primary-200);
+} */
