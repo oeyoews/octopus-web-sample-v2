@@ -1,8 +1,11 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
-/* @layer theme, base, components, utilities ;
 
-@import "tailwindcss/theme.css" layer(theme);
+@source "../../../content/**/*";
+
+@layer theme, base, components, utilities ;
+
+/* @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/preflight.css" layer(base);
 @import "tailwindcss/utilities.css" layer(utilities); */
 
