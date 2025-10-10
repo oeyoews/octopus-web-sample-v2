@@ -1,17 +1,43 @@
 <template>
-  <div class="">
-    <UContainer class="py-4 mb-16 gap-2 ">
-      <u-tabs :items variant="link" orientation="horizontal"> </u-tabs>
-      <UTooltip text="Open on GitHub">
-        <UButton icon="i-lucide-wifi" label="Show toast" color="primary" variant="outline" @click="showToast" />
-      </UTooltip>
+  <div class="neo-bg">
+    <UContainer class="relative z-10 py-4 gap-2 flex flex-col min-h-screen">
 
-      <UModal title="Modal with title">
-        <UButton icon="i-lucide-circle-question-mark" color="info" variant="ghost" />
-        <template #body>
-          your content here
-        </template>
-      </UModal>
+      <!-- heading -->
+      <header class="mb-8 text-center select-none">
+        <div class="inline-flex items-center justify-center">
+          <UIcon name="i-lucide-cpu" class="i-lucide-cpu size-6 mr-3 text-emerald-400 animate-pulse"></UIcon>
+          <h1
+            class="neo-glow text-3xl md:text-4xl font-extrabold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-lime-400 to-green-600">
+
+            系统功能面板
+          </h1>
+          <UIcon name="i-lucide-cpu" class="i-lucide-cpu size-6 ml-3 text-emerald-400 animate-pulse"></UIcon>
+        </div>
+        <div
+          class="h-0.5 w-48 mx-auto mt-4 bg-gradient-to-r from-transparent via-emerald-400/60 to-transparent blur-[1px]">
+        </div>
+      </header>
+
+      <!-- tabs -->
+      <u-tabs :items variant="link" orientation="horizontal"> </u-tabs>
+      <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 flex-1"> -->
+      <div>
+        <UTooltip text="Open on GitHub">
+          <UButton icon="i-lucide-wifi" label="Show toast" color="primary" variant="outline" @click="showToast" />
+        </UTooltip>
+      </div>
+
+      <!-- <div>
+        <UModal title="Modal with title">
+          <UButton icon="i-lucide-circle-question-mark" color="info" variant="ghost" />
+          <template #body>
+            your content here
+          </template>
+</UModal>
+</div> -->
+
+      <!-- 其余网格单元为空，占位使用，可按需替换为真实卡片/组件 -->
+      <!-- </div> -->
     </UContainer>
   </div>
 </template>
@@ -20,22 +46,22 @@
   const items = [
     {
       label: '中断、外推功能',
-      icon: 'i-lucide-user',
+      icon: 'i-lucide-zap',
       slot: 'account'
     },
     {
       label: '平滑功能',
-      icon: 'i-lucide-lock',
+      icon: 'i-lucide-sliders',
       slot: 'password'
     },
     {
       label: '融合功能',
-      icon: 'i-lucide-user',
+      icon: 'i-lucide-layers',
       slot: 'account'
     },
     {
       label: '时空统一功能',
-      icon: 'i-lucide-user',
+      icon: 'i-lucide-clock',
       slot: 'account'
     },
   ]
@@ -52,3 +78,33 @@
     })
   }
 </script>
+
+<style scoped>
+  .neo-bg {
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(16, 185, 129, 0.14), transparent 60%),
+      /* emerald-500 */
+      radial-gradient(800px 400px at -10% 20%, rgba(132, 204, 22, 0.10), transparent 60%),
+      /* lime-500 */
+      linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0));
+  }
+
+  .neo-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.04)) 0 0/100% 1px no-repeat,
+      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.05) 0px, rgba(255, 255, 255, 0.05) 1px, transparent 1px, transparent 40px),
+      repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0px, rgba(255, 255, 255, 0.05) 1px, transparent 1px, transparent 40px);
+    mask: radial-gradient(circle at 50% 20%, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 1) 70%);
+    pointer-events: none;
+  }
+
+  .neo-glow {
+    position: relative;
+    text-shadow: 0 0 18px rgba(16, 185, 129, 0.35), 0 0 36px rgba(132, 204, 22, 0.25);
+  }
+</style>
