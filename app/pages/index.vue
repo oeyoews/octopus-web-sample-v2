@@ -24,7 +24,7 @@
       <div class="debug-actions flex gap-2">
       </div>
       <!-- console terminal -->
-      <UCard class="absolute bottom-4 left-0 right-0">
+      <UCard class="absolute bottom-8 left-0 right-0">
         <template #header>
           <div class="flex items-center justify-between">
             <div class="flex items-center">
@@ -32,24 +32,28 @@
                 日志面板
               </UButton>
             </div>
-            <UModal title="系统配置">
-              <UButton icon="i-lucide-settings" color='success' variant="ghost">
-              </UButton>
-              <template #body>
-                <UInput placeholder="WebSocket URL" class="w-full" v-model="wsUrl" :ui="{ trailing: 'pr-0.5' }">
-                  <template v-if="wsUrl?.length" #trailing>
-                    <UTooltip text="Copy to clipboard" :content="{ side: 'right' }">
-                      <UButton :color="copied ? 'success' : 'neutral'" variant="link" size="sm"
-                        :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-copy'" aria-label="Copy to clipboard"
-                        @click="copy(wsUrl)" />
-                    </UTooltip>
-                  </template>
-                </UInput>
-              </template>
-            </UModal>
+            <div class="flex items-center gap-2">
+              <UButton color="info" :icon="isLogVisible ? 'i-lucide-eye' : 'i-lucide-eye-off'" variant="ghost"
+                @click="toggleLogVisibility" />
+              <UModal title="系统配置">
+                <UButton icon="i-lucide-settings" color='success' variant="ghost">
+                </UButton>
+                <template #body>
+                  <UInput placeholder="WebSocket URL" class="w-full" v-model="wsUrl" :ui="{ trailing: 'pr-0.5' }">
+                    <template v-if="wsUrl?.length" #trailing>
+                      <UTooltip text="Copy to clipboard" :content="{ side: 'right' }">
+                        <UButton :color="copied ? 'success' : 'neutral'" variant="link" size="sm"
+                          :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-copy'" aria-label="Copy to clipboard"
+                          @click="copy(wsUrl)" />
+                      </UTooltip>
+                    </template>
+                  </UInput>
+                </template>
+              </UModal>
+            </div>
           </div>
         </template>
-        <div class="logs-container" ref="logsContainer">
+        <div v-if="isLogVisible" class="logs-container p-4" ref="logsContainer">
           <div v-if="cacheDebugLogs.length === 0" class="empty-logs">
             <!-- nothing ... -->
             暂无日志
@@ -116,6 +120,12 @@
 
   const logsContainer = ref<HTMLElement>()
   const cacheDebugLogs = ref<string[]>([]);
+  const isLogVisible = ref(false);
+
+  // 切换日志显示/隐藏
+  const toggleLogVisibility = () => {
+    isLogVisible.value = !isLogVisible.value;
+  }
 
   // 自动滚动到底部的函数
   const scrollToBottom = () => {
