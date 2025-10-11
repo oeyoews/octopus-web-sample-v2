@@ -55,14 +55,16 @@
             暂无日志
           </div>
           <div v-else class="log-list">
-            <div v-for="(log, index) in cacheDebugLogs" :key="index" class="log-item log-success">
+            <div v-for="(log, index) in cacheDebugLogs.map(parseLog)" :key="index" class="log-item log-success">
               <!-- :class="{
               'log-success': log.includes('✅'),
               'log-cache': log.includes('🎯'),
               'log-error': log.includes('❌')
             }" -->
-              {{ moment(log.timestamp).format('YYYY-MM-DD HH:mm:ss') }}
-              {{ log }}
+              <div class="font-bold text-cyan-400 italic mr-2">
+                [{{ moment(log.timestamp).format('YYYY-MM-DD HH:mm:ss') }}]
+              </div>
+              {{ log.data }}
             </div>
           </div>
         </div>
@@ -108,8 +110,12 @@
     },
   })
 
+  function parseLog(log: string): Log {
+    return JSON.parse(log);
+  }
+
   const logsContainer = ref<HTMLElement>()
-  const cacheDebugLogs = ref<Log[]>([]);
+  const cacheDebugLogs = ref<string[]>([]);
 
   // 自动滚动到底部的函数
   const scrollToBottom = () => {
@@ -121,7 +127,7 @@
   }
 
   watch(data, (newData) => {
-    console.log(status.value);
+    // console.log(JSON.parse(newData).data);
     // cacheDebugLogs.value = [...cacheDebugLogs.value, newData]
     cacheDebugLogs.value.push(newData);
     // 新日志添加后自动滚动到底部
@@ -223,7 +229,7 @@
   }
 
   .logs-container {
-    max-height: 60vh;
+    height: 25vh;
     overflow-y: auto;
     /* border: 1px solid rgba(156, 163, 175, 0.2); */
     /* border-radius: 8px; */

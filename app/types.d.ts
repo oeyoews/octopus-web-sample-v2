@@ -1,4 +1,4 @@
 interface Log {
 	timestamp: string;
-	message: string;
+	data: string;
 }
