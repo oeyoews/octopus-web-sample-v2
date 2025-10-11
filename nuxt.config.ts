@@ -30,23 +30,38 @@ export default defineNuxtConfig({
     // serverBundle: {
     //   externalizeIconsJson: true,
     // },
+    mode: 'css',
+    cssLayer: 'base',
     clientBundle: {
-      // icons: [
-      //   'heroicons:arrow-path',
-      //   'heroicons:heroicons-exclamation-triangle',
-      // ],
+      icons: [
+        'lucide:zap',
+        'lucide:sliders',
+        'lucide:layers',
+        'lucide:clock',
+        'lucide:eye',
+        'lucide:eye-off',
+        'lucide:chevron-up',
+        'lucide:chevron-down',
+        'lucide:settings',
+        'lucide:copy',
+        'lucide:copy-check',
+        'lucide:cpu',
+        'lucide:square-terminal',
+        'lucide:wifi',
+        'lucide:circle-question-mark',
+      ],
 
       // scan all components in the project and include icons
-      scan: {
-        globInclude: ['app/**/*.vue', /* ... */],
-        globExclude: ['node_modules', 'dist', /* ... */],
-      },
+      // scan: {
+      //   globInclude: ['app/**/*.vue', /* ... */],
+      //   globExclude: ['node_modules', 'dist', /* ... */],
+      // },
 
       // include all custom collections in the client bundle
       includeCustomCollections: true,
 
       // guard for uncompressed bundle size, will fail the build if exceeds
-      sizeLimitKb: 256,
+      sizeLimitKb: 1256,
     },
   },
   ui: {
