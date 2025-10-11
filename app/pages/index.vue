@@ -21,11 +21,11 @@
       <!-- tabs -->
       <u-tabs :items variant="link" orientation="horizontal"> </u-tabs>
       <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 flex-1"> -->
-      <div>
-        <!-- <UTooltip text="Open on GitHub">
+      <!-- <div> -->
+      <!-- <UTooltip text="Open on GitHub">
           <UButton icon="i-lucide-wifi" label="Show toast" color="primary" variant="outline" @click="showToast" />
         </UTooltip> -->
-      </div>
+      <!-- </div> -->
 
       <!-- <div>
         <UModal title="Modal with title">
