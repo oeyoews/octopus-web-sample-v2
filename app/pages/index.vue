@@ -20,7 +20,7 @@
 
       <!-- tabs -->
       <u-tabs :items variant="link" orientation="horizontal"> </u-tabs>
-      <hr class="my-4">
+      <USeparator />
       <div class="debug-actions flex gap-2 my-2">
         <UModal title="系统配置">
           <UButton icon="i-lucide-settings" color='success' variant="outline">
@@ -43,7 +43,7 @@
         </UButton>
       </div>
       <div class="debug-info">
-        <div class="logs-container">
+        <div class="logs-container" ref="logsContainer">
           <div v-if="cacheDebugLogs.length === 0" class="empty-logs">
             nothing ...
           </div>
@@ -54,6 +54,7 @@
               'log-cache': log.includes('🎯'),
               'log-error': log.includes('❌')
             }" -->
+              {{ moment(log.timestamp).format('YYYY-MM-DD HH:mm:ss') }}
               {{ log }}
             </div>
           </div>
@@ -86,10 +87,11 @@
 
 <script setup lang="ts">
   import { useWebSocket, useLocalStorage, useClipboard } from '@vueuse/core'
+  import moment from 'moment';
   const wsUrl = useLocalStorage('backendUrl', 'ws://192.168.75.61:8080/ws/logs');
   const { copy, copied } = useClipboard()
   const { status, data, close } = useWebSocket(wsUrl, {
-    heartbeat: true,
+    heartbeat: false,
     autoReconnect: {
       retries: 1,
       delay: 1000,
@@ -99,12 +101,25 @@
     },
   })
 
+  const logsContainer = ref<HTMLElement>()
+  const cacheDebugLogs = ref<Log[]>([]);
+
+  // 自动滚动到底部的函数
+  const scrollToBottom = () => {
+    nextTick(() => {
+      if (logsContainer.value) {
+        logsContainer.value.scrollTop = logsContainer.value.scrollHeight
+      }
+    })
+  }
+
   watch(data, (newData) => {
     console.log(status.value);
     // cacheDebugLogs.value = [...cacheDebugLogs.value, newData]
     cacheDebugLogs.value.push(newData);
+    // 新日志添加后自动滚动到底部
+    scrollToBottom()
   });
-  const cacheDebugLogs = ref<string[]>([]);
   const items = [
     {
       label: '中断、外推功能',
@@ -201,8 +216,34 @@
   }
 
   .logs-container {
-    max-height: 200px;
+    max-height: 60vh;
     overflow-y: auto;
+    border: 1px solid rgba(156, 163, 175, 0.2);
+    border-radius: 8px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.05);
+    /* 自定义滚动条样式 */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(156, 163, 175, 0.4) transparent;
+
+    /* Webkit浏览器滚动条样式 */
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(156, 163, 175, 0.4);
+      border-radius: 3px;
+      transition: background 0.2s ease;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: rgba(156, 163, 175, 0.6);
+    }
 
     .empty-logs {
       padding: 20px;
