@@ -21,11 +21,26 @@
       <!-- tabs -->
       <u-tabs :items variant="link" orientation="horizontal"> </u-tabs>
       <hr class="my-4">
-      <h3 class="text-lg font-bold">日志</h3>
       <div class="debug-actions flex gap-2 my-2">
-        <UButton @click="cacheDebugLogs = []" color="error" variant="outline" icon="i-lucide-x">清空日志</UButton>
-        <UButton @click="cacheDebugLogs = defaultDebugLogs" color="info" variant="outline"
-          icon="i-lucide-square-terminal">开启日志</UButton>
+        <UModal title="系统配置">
+          <UButton icon="i-lucide-settings" color='success' variant="outline">
+            系统配置
+          </UButton>
+          <template #body>
+            <UInput placeholder="WebSocket URL" class="w-full" v-model="wsUrl" :ui="{ trailing: 'pr-0.5' }">
+              <template v-if="wsUrl?.length" #trailing>
+                <UTooltip text="Copy to clipboard" :content="{ side: 'right' }">
+                  <UButton :color="copied ? 'success' : 'neutral'" variant="link" size="sm"
+                    :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-copy'" aria-label="Copy to clipboard"
+                    @click="copy(wsUrl)" />
+                </UTooltip>
+              </template>
+            </UInput>
+          </template>
+        </UModal>
+        <!-- <UButton @click="cacheDebugLogs = []" color="error" variant="outline" icon="i-lucide-x">清空日志</UButton> -->
+        <UButton @click="" color="info" variant="outline" icon="i-lucide-square-terminal">开启日志
+        </UButton>
       </div>
       <div class="debug-info">
         <div class="logs-container">
@@ -70,15 +85,16 @@
 </template>
 
 <script setup lang="ts">
-  import { useWebSocket, useLocalStorage } from '@vueuse/core'
+  import { useWebSocket, useLocalStorage, useClipboard } from '@vueuse/core'
   const wsUrl = useLocalStorage('backendUrl', 'ws://192.168.75.61:8080/ws/logs');
+  const { copy, copied } = useClipboard()
   const { status, data, close } = useWebSocket(wsUrl, {
     heartbeat: true,
     autoReconnect: {
-      retries: 3,
+      retries: 1,
       delay: 1000,
       onFailed() {
-        alert('Failed to connect WebSocket after 3 retries')
+        console.warn('Failed to connect WebSocket after 1 retries')
       },
     },
   })
@@ -88,12 +104,7 @@
     // cacheDebugLogs.value = [...cacheDebugLogs.value, newData]
     cacheDebugLogs.value.push(newData);
   });
-  const defaultDebugLogs = [
-    '✅ 缓存已更新',
-    '🎯 缓存命中',
-    '❌ 缓存失败'
-  ]
-  const cacheDebugLogs = ref<string[]>(defaultDebugLogs);
+  const cacheDebugLogs = ref<string[]>([]);
   const items = [
     {
       label: '中断、外推功能',
