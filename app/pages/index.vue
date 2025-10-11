@@ -20,6 +20,32 @@
 
       <!-- tabs -->
       <u-tabs :items variant="link" orientation="horizontal"> </u-tabs>
+      <hr class="my-4">
+      <h3 class="text-lg font-bold">日志</h3>
+      <div class="debug-actions flex gap-2 my-2">
+        <UButton @click="cacheDebugLogs = []" color="error" variant="outline" icon="i-lucide-square-x">清空日志</UButton>
+        <UButton @click="cacheDebugLogs = defaultDebugLogs" color="info" variant="outline"
+          icon="i-lucide-square-terminal">开启日志</UButton>
+      </div>
+      <div class="debug-info">
+        <div class="logs-container">
+          <div v-if="cacheDebugLogs.length === 0" class="empty-logs">
+            nothing ...
+          </div>
+          <div v-else class="log-list">
+            <div v-for="(log, index) in cacheDebugLogs" :key="index" class="log-item" :class="{
+              'log-success': log.includes('✅'),
+              'log-cache': log.includes('🎯'),
+              'log-error': log.includes('❌')
+            }">
+              {{ log }}
+            </div>
+          </div>
+        </div>
+        <!-- <div class="debug-actions">
+          <ElButton size="small" @click="cacheDebugLogs = []">清空日志</ElButton>
+        </div> -->
+      </div>
       <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 flex-1"> -->
       <!-- <div> -->
       <!-- <UTooltip text="Open on GitHub">
@@ -43,6 +69,12 @@
 </template>
 
 <script setup lang="ts">
+  const defaultDebugLogs = [
+    '✅ 缓存已更新',
+    '🎯 缓存命中',
+    '❌ 缓存失败'
+  ]
+  const cacheDebugLogs = ref<string[]>(defaultDebugLogs);
   const items = [
     {
       label: '中断、外推功能',
@@ -135,6 +167,46 @@
 
     100% {
       left: 100%;
+    }
+  }
+
+  .logs-container {
+    max-height: 200px;
+    overflow-y: auto;
+
+    .empty-logs {
+      padding: 20px;
+      text-align: center;
+    }
+
+    .log-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      .log-item {
+        padding: 6px 8px;
+        font-size: 12px;
+        line-height: 1.4;
+        background: var(--el-bg-color-page);
+        border-left: 3px solid var(--el-border-color);
+        border-radius: 4px;
+
+        &.log-success {
+          background: rgb(103 194 58 / 10%);
+          border-left-color: var(--el-color-success);
+        }
+
+        &.log-cache {
+          background: rgb(64 158 255 / 10%);
+          border-left-color: var(--el-color-primary);
+        }
+
+        &.log-error {
+          background: rgb(245 108 108 / 10%);
+          border-left-color: var(--el-color-danger);
+        }
+      }
     }
   }
 
