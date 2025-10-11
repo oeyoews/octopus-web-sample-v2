@@ -70,8 +70,8 @@
 </template>
 
 <script setup lang="ts">
-  import { useWebSocket } from '@vueuse/core'
-  const wsUrl = 'ws://192.168.75.61:8080/ws/logs'
+  import { useWebSocket, useLocalStorage } from '@vueuse/core'
+  const wsUrl = useLocalStorage('backendUrl', 'ws://192.168.75.61:8080/ws/logs');
   const { status, data, close } = useWebSocket(wsUrl, {
     heartbeat: true,
     autoReconnect: {
@@ -84,8 +84,9 @@
   })
 
   watch(data, (newData) => {
-    console.log(newData, status);
-    cacheDebugLogs.value = [...cacheDebugLogs.value, newData]
+    console.log(status.value);
+    // cacheDebugLogs.value = [...cacheDebugLogs.value, newData]
+    cacheDebugLogs.value.push(newData);
   });
   const defaultDebugLogs = [
     '✅ 缓存已更新',
@@ -129,7 +130,7 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang="css">
   .neo-bg {
     position: relative;
     overflow: hidden;
@@ -206,23 +207,22 @@
         padding: 6px 8px;
         font-size: 12px;
         line-height: 1.4;
-        background: var(--el-bg-color-page);
-        border-left: 3px solid var(--el-border-color);
+        border-left: 3px solid;
         border-radius: 4px;
 
         &.log-success {
           background: rgb(103 194 58 / 10%);
-          border-left-color: var(--el-color-success);
+          border-left-color: rgb(103 194 58);
         }
 
         &.log-cache {
           background: rgb(64 158 255 / 10%);
-          border-left-color: var(--el-color-primary);
+          border-left-color: rgb(64 158 255);
         }
 
         &.log-error {
           background: rgb(245 108 108 / 10%);
-          border-left-color: var(--el-color-danger);
+          border-left-color: rgb(245 108 108);
         }
       }
     }
