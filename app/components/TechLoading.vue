@@ -3,9 +3,9 @@
 		<div class="tech-loading-container">
 			<!-- 主要loading动画 -->
 			<div class="loading-ring">
-				<div class="ring ring-1"></div>
-				<div class="ring ring-2"></div>
-				<div class="ring ring-3"></div>
+				<div class="ring-1"></div>
+				<div class="ring-2"></div>
+				<div class="ring-3"></div>
 			</div>
 
 			<!-- 中心图标 -->
@@ -114,43 +114,44 @@
 		height: 200px;
 	}
 
-	.ring {
-		position: absolute;
-		border-radius: 50%;
-		border: 2px solid transparent;
-		animation: rotate 2s linear infinite;
-	}
-
 	.ring-1 {
+		position: absolute;
 		width: 200px;
 		height: 200px;
+		border-radius: 50%;
+		border: 2px solid transparent;
 		border-top: 2px solid #00d4ff;
 		border-right: 2px solid #00d4ff;
 		box-shadow: 0 0 20px #00d4ff;
-		animation-duration: 2s;
+		animation: rotate 2s linear infinite;
 	}
 
 	.ring-2 {
+		position: absolute;
 		width: 160px;
 		height: 160px;
 		top: 20px;
 		left: 20px;
+		border-radius: 50%;
+		border: 2px solid transparent;
 		border-bottom: 2px solid #0099cc;
 		border-left: 2px solid #0099cc;
 		box-shadow: 0 0 15px #0099cc;
-		animation-duration: 1.5s;
-		animation-direction: reverse;
+		animation: rotate 1.5s linear infinite reverse;
 	}
 
 	.ring-3 {
+		position: absolute;
 		width: 120px;
 		height: 120px;
 		top: 40px;
 		left: 40px;
+		border-radius: 50%;
+		border: 2px solid transparent;
 		border-top: 2px solid #0066ff;
 		border-right: 2px solid #0066ff;
 		box-shadow: 0 0 10px #0066ff;
-		animation-duration: 1s;
+		animation: rotate 1s linear infinite;
 	}
 
 	@keyframes rotate {
