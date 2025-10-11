@@ -33,11 +33,15 @@
               </UButton>
             </div>
             <div class="flex items-center gap-2">
-              <UButton color="info" :icon="isLogVisible ? 'i-lucide-eye' : 'i-lucide-eye-off'" variant="ghost"
-                @click="toggleLogVisibility" />
+              <UTooltip text="显示/隐藏日志">
+                <UButton color="info" :icon="isLogVisible ? 'i-lucide-chevron-up' : 'i-lucide-chevron-down'"
+                  variant="ghost" @click="toggleLogVisibility" />
+              </UTooltip>
               <UModal title="系统配置">
-                <UButton icon="i-lucide-settings" color='success' variant="ghost">
-                </UButton>
+                <UTooltip text="系统配置">
+                  <UButton icon="i-lucide-settings" color='success' variant="ghost">
+                  </UButton>
+                </UTooltip>
                 <template #body>
                   <UInput placeholder="WebSocket URL" class="w-full" v-model="wsUrl" :ui="{ trailing: 'pr-0.5' }">
                     <template v-if="wsUrl?.length" #trailing>
