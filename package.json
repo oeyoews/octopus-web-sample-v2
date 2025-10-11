@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@iconify-json/lucide": "^1.2.69",
     "@microsoft/fetch-event-source": "^2.0.1",
     "@nuxt/ui": "4.0.1",
     "@tailwindcss/vite": "^4.1.12",

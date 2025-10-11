@@ -32,36 +32,38 @@ export default defineNuxtConfig({
     // },
     mode: 'css',
     cssLayer: 'base',
+    // serviceBundle: false,
     clientBundle: {
-      icons: [
-        'lucide:zap',
-        'lucide:sliders',
-        'lucide:layers',
-        'lucide:clock',
-        'lucide:eye',
-        'lucide:eye-off',
-        'lucide:chevron-up',
-        'lucide:chevron-down',
-        'lucide:settings',
-        'lucide:copy',
-        'lucide:copy-check',
-        'lucide:cpu',
-        'lucide:square-terminal',
-        'lucide:wifi',
-        'lucide:circle-question-mark',
-      ],
+      // @see: https://github.com/nuxt/icon/issues/245
+      // icons: [
+      // 'lucide:zap',
+      // 'lucide:sliders',
+      // 'lucide:layers',
+      // 'lucide:clock',
+      // 'lucide:eye',
+      // 'lucide:eye-off',
+      // 'lucide:chevron-up',
+      // 'lucide:chevron-down',
+      // 'lucide:settings',
+      // 'lucide:copy',
+      // 'lucide:copy-check',
+      // 'lucide:cpu',
+      // 'lucide:square-terminal',
+      // 'lucide:wifi',
+      // 'lucide:circle-question-mark',
+      // ],
 
       // scan all components in the project and include icons
-      // scan: {
-      //   globInclude: ['app/**/*.vue', /* ... */],
-      //   globExclude: ['node_modules', 'dist', /* ... */],
-      // },
+      scan: {
+        globInclude: ['app/**/*.vue', /* ... */],
+        globExclude: ['node_modules', 'dist', /* ... */],
+      },
 
       // include all custom collections in the client bundle
-      includeCustomCollections: true,
+      // includeCustomCollections: true,
 
       // guard for uncompressed bundle size, will fail the build if exceeds
-      sizeLimitKb: 1256,
+      // sizeLimitKb: 1256,
     },
   },
   ui: {
