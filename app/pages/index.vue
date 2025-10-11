@@ -23,7 +23,7 @@
       <hr class="my-4">
       <h3 class="text-lg font-bold">日志</h3>
       <div class="debug-actions flex gap-2 my-2">
-        <UButton @click="cacheDebugLogs = []" color="error" variant="outline" icon="i-lucide-square-x">清空日志</UButton>
+        <UButton @click="cacheDebugLogs = []" color="error" variant="outline" icon="i-lucide-x">清空日志</UButton>
         <UButton @click="cacheDebugLogs = defaultDebugLogs" color="info" variant="outline"
           icon="i-lucide-square-terminal">开启日志</UButton>
       </div>
@@ -33,11 +33,12 @@
             nothing ...
           </div>
           <div v-else class="log-list">
-            <div v-for="(log, index) in cacheDebugLogs" :key="index" class="log-item" :class="{
+            <div v-for="(log, index) in cacheDebugLogs" :key="index" class="log-item log-success">
+              <!-- :class="{
               'log-success': log.includes('✅'),
               'log-cache': log.includes('🎯'),
               'log-error': log.includes('❌')
-            }">
+            }" -->
               {{ log }}
             </div>
           </div>
@@ -69,6 +70,23 @@
 </template>
 
 <script setup lang="ts">
+  import { useWebSocket } from '@vueuse/core'
+  const wsUrl = 'ws://192.168.75.61:8080/ws/logs'
+  const { status, data, close } = useWebSocket(wsUrl, {
+    heartbeat: true,
+    autoReconnect: {
+      retries: 3,
+      delay: 1000,
+      onFailed() {
+        alert('Failed to connect WebSocket after 3 retries')
+      },
+    },
+  })
+
+  watch(data, (newData) => {
+    console.log(newData, status);
+    cacheDebugLogs.value = [...cacheDebugLogs.value, newData]
+  });
   const defaultDebugLogs = [
     '✅ 缓存已更新',
     '🎯 缓存命中',
