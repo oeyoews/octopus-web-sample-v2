@@ -5,16 +5,16 @@
       <!-- heading -->
       <header class="mb-8 text-center select-none">
         <div class="inline-flex items-center justify-center">
-          <UIcon name="i-lucide-cpu" class="i-lucide-cpu size-6 mr-3 text-cyan-400 animate-pulse"></UIcon>
+          <UIcon name="i-lucide-cpu" class="i-lucide-cpu size-6 mr-3 text-cyan-400 rotating-icon"></UIcon>
           <h1
             class="neo-glow text-3xl md:text-4xl font-extrabold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-500">
 
             数据引接功能面板
           </h1>
-          <UIcon name="i-lucide-cpu" class="i-lucide-cpu size-6 ml-3 text-cyan-400 animate-pulse"></UIcon>
+          <UIcon name="i-lucide-cpu" class="i-lucide-cpu size-6 ml-3 text-cyan-400"></UIcon>
         </div>
         <div
-          class="h-0.5 w-48 mx-auto mt-4 bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent blur-[1px]">
+          class="flowing-line h-0.5 w-48 mx-auto mt-4 bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent blur-[1px]">
         </div>
       </header>
 
@@ -107,4 +107,35 @@
     position: relative;
     text-shadow: 0 0 18px rgba(34, 211, 238, 0.35), 0 0 36px rgba(99, 102, 241, 0.25);
   }
+
+  .flowing-line {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .flowing-line::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.6), transparent);
+    animation: lineFlow 2s ease-in-out infinite;
+  }
+
+  @keyframes lineFlow {
+    0% {
+      left: -100%;
+    }
+
+    50% {
+      left: 100%;
+    }
+
+    100% {
+      left: 100%;
+    }
+  }
+
 </style>
