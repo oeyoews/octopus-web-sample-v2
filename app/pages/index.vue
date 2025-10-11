@@ -20,32 +20,39 @@
 
       <!-- tabs -->
       <u-tabs :items variant="link" orientation="horizontal"> </u-tabs>
-      <USeparator />
-      <div class="debug-actions flex gap-2 my-2">
-        <UModal title="系统配置">
-          <UButton icon="i-lucide-settings" color='success' variant="outline">
-            系统配置
-          </UButton>
-          <template #body>
-            <UInput placeholder="WebSocket URL" class="w-full" v-model="wsUrl" :ui="{ trailing: 'pr-0.5' }">
-              <template v-if="wsUrl?.length" #trailing>
-                <UTooltip text="Copy to clipboard" :content="{ side: 'right' }">
-                  <UButton :color="copied ? 'success' : 'neutral'" variant="link" size="sm"
-                    :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-copy'" aria-label="Copy to clipboard"
-                    @click="copy(wsUrl)" />
-                </UTooltip>
-              </template>
-            </UInput>
-          </template>
-        </UModal>
-        <!-- <UButton @click="cacheDebugLogs = []" color="error" variant="outline" icon="i-lucide-x">清空日志</UButton> -->
-        <UButton @click="" color="info" variant="outline" icon="i-lucide-square-terminal">开启日志
-        </UButton>
+      <USeparator color="neutral" />
+      <div class="debug-actions flex gap-2">
       </div>
-      <div class="debug-info">
+      <!-- console terminal -->
+      <UCard class="absolute bottom-4 left-0 right-0">
+        <template #header>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <UButton icon="i-lucide-square-terminal" variant="ghost">
+                日志面板
+              </UButton>
+            </div>
+            <UModal title="系统配置">
+              <UButton icon="i-lucide-settings" color='success' variant="ghost">
+              </UButton>
+              <template #body>
+                <UInput placeholder="WebSocket URL" class="w-full" v-model="wsUrl" :ui="{ trailing: 'pr-0.5' }">
+                  <template v-if="wsUrl?.length" #trailing>
+                    <UTooltip text="Copy to clipboard" :content="{ side: 'right' }">
+                      <UButton :color="copied ? 'success' : 'neutral'" variant="link" size="sm"
+                        :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-copy'" aria-label="Copy to clipboard"
+                        @click="copy(wsUrl)" />
+                    </UTooltip>
+                  </template>
+                </UInput>
+              </template>
+            </UModal>
+          </div>
+        </template>
         <div class="logs-container" ref="logsContainer">
           <div v-if="cacheDebugLogs.length === 0" class="empty-logs">
-            nothing ...
+            <!-- nothing ... -->
+            暂无日志
           </div>
           <div v-else class="log-list">
             <div v-for="(log, index) in cacheDebugLogs" :key="index" class="log-item log-success">
@@ -62,7 +69,7 @@
         <!-- <div class="debug-actions">
           <ElButton size="small" @click="cacheDebugLogs = []">清空日志</ElButton>
         </div> -->
-      </div>
+      </UCard>
       <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 flex-1"> -->
       <!-- <div> -->
       <!-- <UTooltip text="Open on GitHub">
@@ -218,10 +225,10 @@
   .logs-container {
     max-height: 60vh;
     overflow-y: auto;
-    border: 1px solid rgba(156, 163, 175, 0.2);
-    border-radius: 8px;
-    padding: 12px;
-    background: rgba(0, 0, 0, 0.05);
+    /* border: 1px solid rgba(156, 163, 175, 0.2); */
+    /* border-radius: 8px; */
+    /* padding: 12px; */
+    /* background: rgba(0, 0, 0, 0.05); */
     /* 自定义滚动条样式 */
     scrollbar-width: thin;
     scrollbar-color: rgba(156, 163, 175, 0.4) transparent;
