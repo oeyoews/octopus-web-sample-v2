@@ -103,9 +103,10 @@
 </template>
 
 <script setup lang="ts">
-  import { useWebSocket, useLocalStorage, useClipboard } from '@vueuse/core'
+  import { useWebSocket, useSessionStorage, useClipboard } from '@vueuse/core'
   import moment from 'moment';
-  const wsUrl = useLocalStorage('backendUrl', 'wss://192.168.75.61:8080/ws/logs');
+  const config = useRuntimeConfig()
+  const wsUrl = useSessionStorage('backendUrl', config.public.baseURL + '/ws/logs');
   const { copy, copied } = useClipboard()
   const { status, data, close } = useWebSocket(wsUrl, {
     heartbeat: false,

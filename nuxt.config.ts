@@ -17,9 +17,9 @@ export default defineNuxtConfig({
     '@nuxt/ui'
   ],
   runtimeConfig: {
-    // public: {
-    //   baseURL: "http://192.168.1.136:9091/api/consumer/pulsar-data"
-    // },
+    public: {
+      baseURL: "http://192.168.1.41:8080"
+    },
   },
   colorMode: {
     preference: 'dark'
