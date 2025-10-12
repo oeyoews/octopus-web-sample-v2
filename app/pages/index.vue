@@ -227,7 +227,7 @@
 
   const logsContainer = ref<HTMLElement>()
   const cacheDebugLogs = ref<string[]>([]);
-  const isLogVisible = ref(false);
+  const isLogVisible = ref(true);
 
   // 切换日志显示/隐藏
   const toggleLogVisibility = () => {
