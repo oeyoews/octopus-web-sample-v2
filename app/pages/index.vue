@@ -4,49 +4,50 @@
       <!-- heading -->
       <Header />
       <!-- tabs -->
-      <u-tabs :items="items" variant="link" orientation="horizontal">
-        <!-- <div class="mb-2"> -->
-        <template #interrupt-client="{ item }">
-          <div class="flex gap-2 mt-4 justify-center">
-            <UButton icon="i-lucide-play" size="lg" variant="outline" @click="() => handleBreak(item.slot)">
-              开始发送数据
-            </UButton>
-            <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop">模拟中断
-            </UButton>
-          </div>
-        </template>
-        <template #scattered-data-client="{ item }">
-          <div class="flex gap-2 mt-4 justify-center">
-            <UButton icon="i-lucide-play" size="lg" variant="outline" @click="() => handleBreak(item.slot)">
-              开始发送数据 </UButton>
-            <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop">数据平滑处理
-            </UButton>
-          </div>
-        </template>
-        <template #multi-source-client="{ item }">
-          <div class="flex gap-2 mt-4 justify-center">
-            <UButton icon="i-lucide-play" size="lg" variant="outline" @click="handleBreak(item.slot)">
-              开始发送数据 </UButton>
-            <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop">数据融合处理
-            </UButton>
-          </div>
-        </template>
-        <template #time-space-client="{ item }">
-          <div class="flex gap-2 mt-4 justify-center">
-            <UButton icon="i-lucide-play" size="lg" variant="outline" @click="() => handleBreak(item.slot)">
-              开始发送数据
-            </UButton>
-            <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop">时空数据标准化
-            </UButton>
-          </div>
-        </template>
-        <!-- </div> -->
-      </u-tabs>
+      <UCard class="p-4 pb-8">
+        <u-tabs :items="items" variant="link" orientation="horizontal">
+          <!-- <div class="mb-2"> -->
+          <template #interrupt-client="{ item }">
+            <div class="flex gap-2 mt-4 justify-center">
+              <UButton icon="i-lucide-play" size="lg" variant="outline" @click="() => handleBreak(item.slot)">
+                开始发送数据
+              </UButton>
+              <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop">模拟中断
+              </UButton>
+            </div>
+          </template>
+          <template #scattered-data-client="{ item }">
+            <div class="flex gap-2 mt-4 justify-center">
+              <UButton icon="i-lucide-play" size="lg" variant="outline" @click="() => handleBreak(item.slot)">
+                开始发送数据 </UButton>
+              <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop">数据平滑处理
+              </UButton>
+            </div>
+          </template>
+          <template #multi-source-client="{ item }">
+            <div class="flex gap-2 mt-4 justify-center">
+              <UButton icon="i-lucide-play" size="lg" variant="outline" @click="handleBreak(item.slot)">
+                开始发送数据 </UButton>
+              <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop">数据融合处理
+              </UButton>
+            </div>
+          </template>
+          <template #time-space-client="{ item }">
+            <div class="flex gap-2 mt-4 justify-center">
+              <UButton icon="i-lucide-play" size="lg" variant="outline" @click="() => handleBreak(item.slot)">
+                开始发送数据
+              </UButton>
+              <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop">时空数据标准化
+              </UButton>
+            </div>
+          </template>
+          <!-- </div> -->
+        </u-tabs>
+      </UCard>
       <!-- <USeparator color="neutral" /> -->
-      <div class="debug-actions flex gap-2">
-      </div>
       <!-- console terminal -->
-      <UCard class="absolute bottom-8 left-0 right-0">
+      <!-- <UCard class="absolute bottom-8 left-0 right-0"> -->
+      <UCard class="mt-4">
         <template #header>
           <div class="flex items-center justify-between">
             <div class="flex items-center">
