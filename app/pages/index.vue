@@ -43,20 +43,31 @@
                   </UButton>
                 </UTooltip>
                 <template #body>
-                  <div class="flex gap-0">
-                    <UInput placeholder="IP:PORT (e.g., 192.168.1.1:8080)" class="flex-1 rounded-r-none"
-                      v-model="baseUrl" :ui="{ trailing: 'pr-0.5' }">
-                      <template v-if="baseUrl?.length" #trailing>
-                        <UTooltip text="Copy to clipboard" :content="{ side: 'right' }">
-                          <UButton :color="copied ? 'success' : 'neutral'" variant="link" size="sm"
-                            :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-copy'" aria-label="Copy to clipboard"
-                            @click="copy(fullWsUrl)" />
-                        </UTooltip>
-                      </template>
-                    </UInput>
-                    <UInput :model-value="pathUrl"
-                      class="flex-shrink-0 rounded-l-none border-l-0 bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400"
-                      disabled readonly />
+                  <div class="space-y-2">
+                    <div class="flex gap-0">
+                      <UInput placeholder="IP:PORT (e.g., 192.168.1.1:8080)" class="flex-1 rounded-r-none"
+                        v-model="baseUrl" :ui="{ trailing: 'pr-0.5' }" :color="isValidUrl ? 'primary' : 'error'"
+                        :variant="isValidUrl ? 'outline' : 'outline'">
+                        <template v-if="baseUrl?.length" #trailing>
+                          <UTooltip text="Copy to clipboard" :content="{ side: 'right' }">
+                            <UButton :color="copied ? 'success' : 'neutral'" variant="link" size="sm"
+                              :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-copy'" aria-label="Copy to clipboard"
+                              @click="copy(fullWsUrl)" />
+                          </UTooltip>
+                        </template>
+                      </UInput>
+                      <UInput :model-value="pathUrl"
+                        class="flex-shrink-0 rounded-l-none border-l-0 bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400"
+                        disabled readonly />
+                    </div>
+                    <div v-if="!isValidUrl && urlError" class="text-red-500 text-sm flex items-center gap-1">
+                      <UIcon name="i-lucide-alert-circle" class="size-4" />
+                      {{ urlError }}
+                    </div>
+                    <div v-if="isValidUrl && baseUrl" class="text-green-500 text-sm flex items-center gap-1">
+                      <UIcon name="i-lucide-check-circle" class="size-4" />
+                      格式正确
+                    </div>
                   </div>
                 </template>
               </UModal>
@@ -117,7 +128,10 @@
   // Split URL into base (IP:PORT) and path parts
   const baseUrl = ref('')
   const pathUrl = '/ws/logs'
+  const isValidUrl = ref(true)
+  const urlError = ref('')
 
+  import { validateIpPort } from '~/utils'
   // Extract base URL from full URL
   const extractBaseUrl = (url: string) => {
     try {
@@ -129,14 +143,20 @@
   }
 
   // Initialize baseUrl from stored wsUrl
-  baseUrl.value = extractBaseUrl(wsUrl.value)
+  baseUrl.value = extractBaseUrl(wsUrl.value || '')
 
   // Computed property to reconstruct full URL
   const fullWsUrl = computed(() => `${baseUrl.value}${pathUrl}`)
 
   // Watch for changes in baseUrl and update wsUrl
   watch(baseUrl, (newBaseUrl) => {
-    wsUrl.value = `${newBaseUrl}${pathUrl}`
+    const validation = validateIpPort(newBaseUrl || '')
+    isValidUrl.value = validation.isValid
+    urlError.value = validation.error
+
+    if (validation.isValid) {
+      wsUrl.value = `${newBaseUrl}${pathUrl}`
+    }
   })
   const { copy, copied } = useClipboard()
   const { status, data, close } = useWebSocket(wsUrl, {
