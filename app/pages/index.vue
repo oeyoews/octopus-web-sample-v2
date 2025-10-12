@@ -48,6 +48,9 @@
               </UButton>
             </div>
             <div class="flex items-center gap-2">
+              <UTooltip text="清空日志" v-if="isLogVisible && cacheDebugLogs.length > 0">
+                <UButton color="error" icon="i-lucide-x" variant="ghost" @click="clearLogList" />
+              </UTooltip>
               <UTooltip text="显示/隐藏日志">
                 <UButton color="info" :icon="isLogVisible ? 'i-lucide-chevron-up' : 'i-lucide-chevron-down'"
                   variant="ghost" @click="toggleLogVisibility" />
@@ -128,6 +131,11 @@
       console.log(res.data.value)
       showToast(type)
     })
+  }
+
+  function clearLogList() {
+    cacheDebugLogs.value = [];
+    showToast('日志已清空', '日志通知')
   }
 
   // Split URL into base (IP:PORT) and path parts
@@ -247,11 +255,11 @@
     slot: 'time-space-client'
   },
   ]
-  const toast = useToast()
+  const toast = useToast();
 
-  function showToast(message: string) {
+  function showToast(message: string, title = '事件通知') {
     toast.add({
-      title: '事件通知',
+      title,
       duration: 3000,
       description: message,
       icon: 'i-lucide-bell',
