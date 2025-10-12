@@ -1,0 +1,122 @@
+  .neo-bg {
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(34, 211, 238, 0.14), transparent 60%),
+      /* cyan-400 */
+      radial-gradient(800px 400px at -10% 20%, rgba(59, 130, 246, 0.12), transparent 60%),
+      /* blue-500 */
+      linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0));
+  }
+
+  .neo-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.04)) 0 0/100% 1px no-repeat,
+      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.05) 0px, rgba(255, 255, 255, 0.05) 1px, transparent 1px, transparent 40px),
+      repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0px, rgba(255, 255, 255, 0.05) 1px, transparent 1px, transparent 40px);
+    mask: radial-gradient(circle at 50% 20%, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 1) 70%);
+    pointer-events: none;
+  }
+
+  .neo-glow {
+    position: relative;
+    text-shadow: 0 0 18px rgba(34, 211, 238, 0.35), 0 0 36px rgba(99, 102, 241, 0.25);
+  }
+
+  .flowing-line {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .flowing-line::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.6), transparent);
+    animation: lineFlow 2s ease-in-out infinite;
+  }
+
+  @keyframes lineFlow {
+    0% {
+      left: -100%;
+    }
+
+    50% {
+      left: 100%;
+    }
+
+    100% {
+      left: 100%;
+    }
+  }
+
+  .logs-container {
+    height: 25vh;
+    overflow-y: auto;
+    /* border: 1px solid rgba(156, 163, 175, 0.2); */
+    /* border-radius: 8px; */
+    /* padding: 12px; */
+    /* background: rgba(0, 0, 0, 0.05); */
+    /* 自定义滚动条样式 */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(156, 163, 175, 0.4) transparent;
+
+    /* Webkit浏览器滚动条样式 */
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(156, 163, 175, 0.4);
+      border-radius: 3px;
+      transition: background 0.2s ease;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: rgba(156, 163, 175, 0.6);
+    }
+
+    .empty-logs {
+      padding: 20px;
+      text-align: center;
+    }
+
+    .log-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      .log-item {
+        padding: 6px 8px;
+        font-size: 12px;
+        line-height: 1.4;
+        border-left: 3px solid;
+        border-radius: 4px;
+
+        &.log-success {
+          background: rgb(103 194 58 / 10%);
+          border-left-color: rgb(103 194 58);
+        }
+
+        &.log-cache {
+          background: rgb(64 158 255 / 10%);
+          border-left-color: rgb(64 158 255);
+        }
+
+        &.log-error {
+          background: rgb(245 108 108 / 10%);
+          border-left-color: rgb(245 108 108);
+        }
+      }
+    }
+  }
