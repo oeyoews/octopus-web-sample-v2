@@ -1,6 +1,7 @@
 interface Log {
 	timestamp: string;
 	data: string;
+	message: string
 }
 
 type IEventType =

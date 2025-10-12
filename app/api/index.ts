@@ -9,7 +9,13 @@ export const useCommonApi = (type: IEventType) =>
 		}),
 	})
 
+// deprecated
 export const useStopCommonApi = (type: IEventType) =>
 	useMyFetch(`/api/kafka/clients/${type}/stop`, {
+		method: 'POST',
+	})
+
+export const useStopAllCommonApi = () =>
+	useMyFetch(`/api/kafka/clients/stopAll`, {
 		method: 'POST',
 	})

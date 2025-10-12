@@ -11,7 +11,7 @@
             <UButton icon="i-lucide-play" size="lg" variant="outline" @click="() => handleBreak(item.slot)">
               开始发送数据
             </UButton>
-            <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop(item.slot)">模拟中断
+            <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop">模拟中断
             </UButton>
           </div>
         </template>
@@ -19,7 +19,7 @@
           <div class="flex gap-2 mt-4 justify-center">
             <UButton icon="i-lucide-play" size="lg" variant="outline" @click="() => handleBreak(item.slot)">
               开始发送数据 </UButton>
-            <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop(item.slot)">数据平滑处理
+            <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop">数据平滑处理
             </UButton>
           </div>
         </template>
@@ -27,7 +27,7 @@
           <div class="flex gap-2 mt-4 justify-center">
             <UButton icon="i-lucide-play" size="lg" variant="outline" @click="handleBreak(item.slot)">
               开始发送数据 </UButton>
-            <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop(item.slot)">数据融合处理
+            <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop">数据融合处理
             </UButton>
           </div>
         </template>
@@ -36,7 +36,7 @@
             <UButton icon="i-lucide-play" size="lg" variant="outline" @click="() => handleBreak(item.slot)">
               开始发送数据
             </UButton>
-            <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop(item.slot)">时空数据标准化
+            <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop">时空数据标准化
             </UButton>
           </div>
         </template>
@@ -105,14 +105,16 @@
             暂无日志
           </div>
           <div v-else class="log-list">
-            <div v-for="(log, index) in cacheDebugLogs.map(parseLog)" :key="index" class="log-item log-success">
-              <!-- :class="{
-              'log-success': log.includes('✅'),
-              'log-cache': log.includes('🎯'),
-              'log-error': log.includes('❌')
-            }" -->
-              <div class="font-bold text-cyan-400 italic mr-2">
+            <div v-for="(log, index) in cacheDebugLogs.map(parseLog)" :key="index" class="log-item log-success" :class="{
+              'log-success': log.message.startsWith('✅'),
+              'log-cache': log.message.startsWith('🎯'),
+              'log-error': log.message.startsWith('xx')
+            }">
+              <div class="text-cyan-400 mr-2">
                 [{{ moment(log.timestamp).format('YYYY-MM-DD HH:mm:ss') }}]
+              </div>
+              <div class="font-bold text-green-400 mr-2">
+                {{ log.message }}
               </div>
               {{ log.data }}
             </div>
@@ -131,7 +133,7 @@
   import moment from 'moment';
   const config = useRuntimeConfig()
   const wsUrl = useSessionStorage('backendUrl', config.public.wsURL + '/ws/logs');
-  import { useCommonApi, useStopCommonApi } from '~/api'
+  import { useCommonApi, useStopAllCommonApi } from '~/api'
 
   function handleBreak(type: any) {
     useCommonApi(type).then((res: any) => {
@@ -140,10 +142,10 @@
     })
   }
 
-  function handleStop(type: any) {
-    useStopCommonApi(type).then((res: any) => {
+  function handleStop() {
+    useStopAllCommonApi().then((res: any) => {
       console.log(res.data.value)
-      showToast(type + "(Stop)", '事件停止通知', 'error')
+      showToast("", '事件停止通知', 'error')
     })
   }
 
