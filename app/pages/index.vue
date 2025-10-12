@@ -30,9 +30,9 @@
                 <template #body>
                   <div class="space-y-2">
                     <div class="flex gap-0">
-                      <UInput placeholder="IP:PORT (e.g., 192.168.1.1:8080)" class="flex-1 rounded-r-none"
-                        v-model="baseUrl" :ui="{ trailing: 'pr-0.5' }" :color="isValidUrl ? 'primary' : 'error'"
-                        :variant="isValidUrl ? 'outline' : 'outline'">
+                      <UInput placeholder="WebSocket地址 (例如: 192.168.1.1:8080 或 ws://192.168.1.1:8080)"
+                        class="flex-1 rounded-r-none" v-model="baseUrl" :ui="{ trailing: 'pr-0.5' }"
+                        :color="isValidUrl ? 'primary' : 'error'" :variant="isValidUrl ? 'outline' : 'outline'">
                         <template v-if="baseUrl?.length" #trailing>
                           <UTooltip text="Copy to clipboard" :content="{ side: 'right' }">
                             <UButton :color="copied ? 'success' : 'neutral'" variant="link" size="sm"
@@ -112,8 +112,21 @@
   // Initialize baseUrl from stored wsUrl
   baseUrl.value = extractBaseUrl(wsUrl.value || '')
 
-  // Computed property to reconstruct full URL
-  const fullWsUrl = computed(() => `${baseUrl.value}${pathUrl}`)
+  // Computed property to reconstruct full WebSocket URL
+  const fullWsUrl = computed(() => {
+    // 如果baseUrl没有协议前缀，添加ws://
+    if (baseUrl.value && !baseUrl.value.startsWith('ws') && !baseUrl.value.startsWith('http')) {
+      return `ws://${baseUrl.value}${pathUrl}`
+    }
+    // 如果baseUrl有http前缀，转换为ws前缀
+    if (baseUrl.value && baseUrl.value.startsWith('http://')) {
+      return baseUrl.value.replace('http://', 'ws://') + pathUrl
+    }
+    if (baseUrl.value && baseUrl.value.startsWith('https://')) {
+      return baseUrl.value.replace('https://', 'wss://') + pathUrl
+    }
+    return `${baseUrl.value}${pathUrl}`
+  })
 
   // Watch for changes in baseUrl and update wsUrl
   watch(baseUrl, (newBaseUrl) => {
@@ -122,7 +135,16 @@
     urlError.value = validation.error
 
     if (validation.isValid) {
-      wsUrl.value = `${newBaseUrl}${pathUrl}`
+      // 如果baseUrl没有协议前缀，添加ws://
+      if (newBaseUrl && !newBaseUrl.startsWith('ws') && !newBaseUrl.startsWith('http')) {
+        wsUrl.value = `ws://${newBaseUrl}${pathUrl}`
+      } else if (newBaseUrl && newBaseUrl.startsWith('http://')) {
+        wsUrl.value = newBaseUrl.replace('http://', 'ws://') + pathUrl
+      } else if (newBaseUrl && newBaseUrl.startsWith('https://')) {
+        wsUrl.value = newBaseUrl.replace('https://', 'wss://') + pathUrl
+      } else {
+        wsUrl.value = `${newBaseUrl}${pathUrl}`
+      }
     }
   })
   const { copy, copied } = useClipboard()

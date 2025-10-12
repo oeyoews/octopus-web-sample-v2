@@ -18,7 +18,7 @@ export default defineNuxtConfig({
   ],
   runtimeConfig: {
     public: {
-      baseURL: "http://192.168.1.41:8080"
+      baseURL: "ws://192.168.1.41:8080"
     },
   },
   colorMode: {
