@@ -80,6 +80,12 @@ export default defineNuxtConfig({
     plugins: [
       tailwindcss(),
     ],
+    optimizeDeps: {
+      include: [
+        "@vueuse/core",
+        "moment"
+      ]
+    }
     // build: { }
   },
   ssr: false
