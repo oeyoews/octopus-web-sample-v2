@@ -21,7 +21,7 @@
 </script>
 
 <template>
-  <UApp>
+  <UApp :toaster="{ position: 'top-right' }">
     <!-- 科技感Loading组件 -->
     <TechLoading :is-loading="isLoading" :progress="loadingProgress" />
 

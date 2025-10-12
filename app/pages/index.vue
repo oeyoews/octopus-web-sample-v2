@@ -4,8 +4,38 @@
       <!-- heading -->
       <Header />
       <!-- tabs -->
-      <u-tabs :items variant="link" orientation="horizontal"> </u-tabs>
-      <USeparator color="neutral" />
+      <u-tabs :items="items" variant="link" orientation="horizontal">
+        <!-- <div class="mb-2"> -->
+        <template #interrupt-client="{ item }">
+          <div class="flex gap-2 mt-4 justify-center">
+            <UButton icon="i-lucide-play" size="lg" variant="outline" @click="() => handleBreak(item.slot)">
+              开始发送数据
+            </UButton>
+            <UButton icon="i-lucide-pause" color="error" variant="outline">模拟中断 </UButton>
+          </div>
+        </template>
+        <template #scattered-data-client="{ item }">
+          <div class="flex gap-2 mt-4 justify-center">
+            <UButton icon="i-lucide-play" size="lg" variant="outline" @click="() => handleBreak(item.slot)">
+              开始发送数据 </UButton>
+          </div>
+        </template>
+        <template #multi-source-client="{ item }">
+          <div class="flex gap-2 mt-4 justify-center">
+            <UButton icon="i-lucide-play" size="lg" variant="outline" @click="handleBreak(item.slot)">
+              开始发送数据 </UButton>
+          </div>
+        </template>
+        <template #time-space-client="{ item }">
+          <div class="flex gap-2 mt-4 justify-center">
+            <UButton icon="i-lucide-play" size="lg" variant="outline" @click="() => handleBreak(item.slot)">
+              开始发送数据
+            </UButton>
+          </div>
+        </template>
+        <!-- </div> -->
+      </u-tabs>
+      <!-- <USeparator color="neutral" /> -->
       <div class="debug-actions flex gap-2">
       </div>
       <!-- console terminal -->
@@ -90,7 +120,15 @@
   import { useWebSocket, useSessionStorage, useClipboard } from '@vueuse/core'
   import moment from 'moment';
   const config = useRuntimeConfig()
-  const wsUrl = useSessionStorage('backendUrl', config.public.baseURL + '/ws/logs');
+  const wsUrl = useSessionStorage('backendUrl', config.public.wsURL + '/ws/logs');
+  import { useCommonApi } from '~/api'
+
+  function handleBreak(type: any) {
+    useCommonApi(type).then((res: any) => {
+      console.log(res.data.value)
+      showToast(type)
+    })
+  }
 
   // Split URL into base (IP:PORT) and path parts
   const baseUrl = ref('')
@@ -188,36 +226,35 @@
     // 新日志添加后自动滚动到底部
     scrollToBottom()
   });
-  const items = [
-    {
-      label: '中断、外推功能',
-      icon: 'i-lucide-zap',
-      slot: 'account'
-    },
-    {
-      label: '平滑功能',
-      icon: 'i-lucide-sliders',
-      slot: 'password'
-    },
-    {
-      label: '融合功能',
-      icon: 'i-lucide-layers',
-      slot: 'account'
-    },
-    {
-      label: '时空统一功能',
-      icon: 'i-lucide-clock',
-      slot: 'account'
-    },
+  const items = [{
+    label: '1. 中断、外推功能',
+    icon: 'i-lucide-zap',
+    slot: 'interrupt-client'
+  },
+  {
+    label: '2. 平滑功能',
+    icon: 'i-lucide-sliders',
+    slot: "scattered-data-client"
+  },
+  {
+    label: '3. 融合功能',
+    icon: 'i-lucide-layers',
+    slot: 'multi-source-client'
+  },
+  {
+    label: '4. 时空统一功能',
+    icon: 'i-lucide-clock',
+    slot: 'time-space-client'
+  },
   ]
   const toast = useToast()
 
-  function showToast() {
+  function showToast(message: string) {
     toast.add({
-      title: 'Uh oh! Something went wrong.',
-      duration: 1500,
-      description: 'There was a problem with your request.',
-      icon: 'i-lucide-wifi',
+      title: '事件通知',
+      duration: 3000,
+      description: message,
+      icon: 'i-lucide-bell',
       progress: false,
       color: 'primary'
     })
