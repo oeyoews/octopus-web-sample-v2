@@ -11,25 +11,32 @@
             <UButton icon="i-lucide-play" size="lg" variant="outline" @click="() => handleBreak(item.slot)">
               开始发送数据
             </UButton>
-            <UButton icon="i-lucide-pause" color="error" variant="outline">模拟中断 </UButton>
+            <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop(item.slot)">模拟中断
+            </UButton>
           </div>
         </template>
         <template #scattered-data-client="{ item }">
           <div class="flex gap-2 mt-4 justify-center">
             <UButton icon="i-lucide-play" size="lg" variant="outline" @click="() => handleBreak(item.slot)">
               开始发送数据 </UButton>
+            <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop(item.slot)">数据平滑处理
+            </UButton>
           </div>
         </template>
         <template #multi-source-client="{ item }">
           <div class="flex gap-2 mt-4 justify-center">
             <UButton icon="i-lucide-play" size="lg" variant="outline" @click="handleBreak(item.slot)">
               开始发送数据 </UButton>
+            <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop(item.slot)">数据融合处理
+            </UButton>
           </div>
         </template>
         <template #time-space-client="{ item }">
           <div class="flex gap-2 mt-4 justify-center">
             <UButton icon="i-lucide-play" size="lg" variant="outline" @click="() => handleBreak(item.slot)">
               开始发送数据
+            </UButton>
+            <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop(item.slot)">时空数据标准化
             </UButton>
           </div>
         </template>
@@ -124,12 +131,19 @@
   import moment from 'moment';
   const config = useRuntimeConfig()
   const wsUrl = useSessionStorage('backendUrl', config.public.wsURL + '/ws/logs');
-  import { useCommonApi } from '~/api'
+  import { useCommonApi, useStopCommonApi } from '~/api'
 
   function handleBreak(type: any) {
     useCommonApi(type).then((res: any) => {
       console.log(res.data.value)
       showToast(type)
+    })
+  }
+
+  function handleStop(type: any) {
+    useStopCommonApi(type).then((res: any) => {
+      console.log(res.data.value)
+      showToast(type + "(Stop)", '事件停止通知', 'error')
     })
   }
 
@@ -257,14 +271,14 @@
   ]
   const toast = useToast();
 
-  function showToast(message: string, title = '事件通知') {
+  function showToast(message: string, title = '事件通知', color: any = "primary") {
     toast.add({
       title,
       duration: 3000,
       description: message,
       icon: 'i-lucide-bell',
       progress: false,
-      color: 'primary'
+      color
     })
   }
 </script>

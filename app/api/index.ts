@@ -8,3 +8,8 @@ export const useCommonApi = (type: IEventType) =>
 			clientId: type,
 		}),
 	})
+
+export const useStopCommonApi = (type: IEventType) =>
+	useMyFetch(`/api/kafka/clients/${type}/stop`, {
+		method: 'POST',
+	})
