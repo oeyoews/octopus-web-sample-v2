@@ -43,15 +43,21 @@
                   </UButton>
                 </UTooltip>
                 <template #body>
-                  <UInput placeholder="WebSocket URL" class="w-full" v-model="wsUrl" :ui="{ trailing: 'pr-0.5' }">
-                    <template v-if="wsUrl?.length" #trailing>
-                      <UTooltip text="Copy to clipboard" :content="{ side: 'right' }">
-                        <UButton :color="copied ? 'success' : 'neutral'" variant="link" size="sm"
-                          :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-copy'" aria-label="Copy to clipboard"
-                          @click="copy(wsUrl)" />
-                      </UTooltip>
-                    </template>
-                  </UInput>
+                  <div class="flex gap-0">
+                    <UInput placeholder="IP:PORT (e.g., 192.168.1.1:8080)" class="flex-1 rounded-r-none"
+                      v-model="baseUrl" :ui="{ trailing: 'pr-0.5' }">
+                      <template v-if="baseUrl?.length" #trailing>
+                        <UTooltip text="Copy to clipboard" :content="{ side: 'right' }">
+                          <UButton :color="copied ? 'success' : 'neutral'" variant="link" size="sm"
+                            :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-copy'" aria-label="Copy to clipboard"
+                            @click="copy(fullWsUrl)" />
+                        </UTooltip>
+                      </template>
+                    </UInput>
+                    <UInput :model-value="pathUrl"
+                      class="flex-shrink-0 rounded-l-none border-l-0 bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400"
+                      disabled readonly />
+                  </div>
                 </template>
               </UModal>
             </div>
@@ -107,6 +113,31 @@
   import moment from 'moment';
   const config = useRuntimeConfig()
   const wsUrl = useSessionStorage('backendUrl', config.public.baseURL + '/ws/logs');
+
+  // Split URL into base (IP:PORT) and path parts
+  const baseUrl = ref('')
+  const pathUrl = '/ws/logs'
+
+  // Extract base URL from full URL
+  const extractBaseUrl = (url: string) => {
+    try {
+      const urlObj = new URL(url)
+      return `${urlObj.protocol}//${urlObj.host}`
+    } catch {
+      return 'http://localhost:8080'
+    }
+  }
+
+  // Initialize baseUrl from stored wsUrl
+  baseUrl.value = extractBaseUrl(wsUrl.value)
+
+  // Computed property to reconstruct full URL
+  const fullWsUrl = computed(() => `${baseUrl.value}${pathUrl}`)
+
+  // Watch for changes in baseUrl and update wsUrl
+  watch(baseUrl, (newBaseUrl) => {
+    wsUrl.value = `${newBaseUrl}${pathUrl}`
+  })
   const { copy, copied } = useClipboard()
   const { status, data, close } = useWebSocket(wsUrl, {
     heartbeat: false,
