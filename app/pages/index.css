@@ -57,7 +57,8 @@
   }
 
   .logs-container {
-    height: 50vh;
+    min-height: 250px;
+    max-height: 50vh;
     overflow-y: auto;
     /* border: 1px solid rgba(156, 163, 175, 0.2); */
     /* border-radius: 8px; */

@@ -17,6 +17,10 @@
               <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop">模拟中断
               </UButton>
             </div>
+            <!-- 文件列表区域 -->
+            <div class="mt-6">
+              <FileList :tab-type="item.slot" />
+            </div>
           </template>
           <template #scattered-data-client="{ item }">
             <!-- 2 -->
@@ -27,6 +31,10 @@
               <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop">数据平滑处理
               </UButton>
             </div>
+            <!-- 文件列表区域 -->
+            <div class="mt-6">
+              <FileList :tab-type="item.slot" />
+            </div>
           </template>
           <template #multi-source-client="{ item }">
             <!-- 3 -->
@@ -35,6 +43,10 @@
                 开始发送数据 </UButton>
               <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop">数据融合处理
               </UButton>
+            </div>
+            <!-- 文件列表区域 -->
+            <div class="mt-6">
+              <FileList :tab-type="item.slot" />
             </div>
           </template>
           <template #time-space-client="{ item }">
@@ -46,6 +58,10 @@
               </UButton>
               <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop">时空数据标准化
               </UButton>
+            </div>
+            <!-- 文件列表区域 -->
+            <div class="mt-6">
+              <FileList :tab-type="item.slot" />
             </div>
           </template>
           <!-- </div> -->
