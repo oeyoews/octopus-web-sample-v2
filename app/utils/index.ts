@@ -4,22 +4,20 @@ export const validateIpPort = (input: string): { isValid: boolean; error: string
 		return { isValid: false, error: '请输入WebSocket服务器地址和端口' }
 	}
 
-	// Check if input contains protocol
-	let cleanInput = input.trim()
-	if (cleanInput.startsWith('ws://')) {
-		cleanInput = cleanInput.replace('ws://', '')
-	} else if (cleanInput.startsWith('wss://')) {
-		cleanInput = cleanInput.replace('wss://', '')
-	} else if (cleanInput.startsWith('http://')) {
-		cleanInput = cleanInput.replace('http://', '')
-	} else if (cleanInput.startsWith('https://')) {
-		cleanInput = cleanInput.replace('https://', '')
+	const cleanInput = input.trim()
+
+	// 检查是否以http://开头
+	if (!cleanInput.startsWith('http://')) {
+		return { isValid: false, error: '请输入http://IP:PORT格式 (例如: http://192.168.1.1:8080)' }
 	}
 
+	// 移除http://前缀
+	const withoutProtocol = cleanInput.replace('http://', '')
+
 	// Split by colon to get IP and port
-	const parts = cleanInput.split(':')
+	const parts = withoutProtocol.split(':')
 	if (parts.length !== 2) {
-		return { isValid: false, error: '格式应为 IP:PORT (例如: 192.168.1.1:8080 或 ws://192.168.1.1:8080)' }
+		return { isValid: false, error: '格式应为 http://IP:PORT (例如: http://192.168.1.1:8080)' }
 	}
 
 	const [ip, port] = parts

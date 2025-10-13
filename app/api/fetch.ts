@@ -3,10 +3,7 @@ const config = useRuntimeConfig()
 
 const getBaseUrl = () => {
 	const backendUrl = sessionStorage.getItem('backendUrl')
-	if (backendUrl) {
-		return new URL(backendUrl.replace('ws', "http")).origin
-	}
-	return config.public.baseURL
+	return backendUrl || config.public.baseURL
 }
 
 export const useMyFetch = createFetch({

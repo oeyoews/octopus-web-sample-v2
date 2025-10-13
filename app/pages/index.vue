@@ -78,9 +78,9 @@
                 <template #body>
                   <div class="space-y-2">
                     <div class="flex gap-0">
-                      <UInput placeholder="WebSocket地址 (例如: 192.168.1.1:8080 或 ws://192.168.1.1:8080)"
-                        class="flex-1 rounded-r-none" v-model="baseUrl" :ui="{ trailing: 'pr-0.5' }"
-                        :color="isValidUrl ? 'primary' : 'error'" :variant="isValidUrl ? 'outline' : 'outline'">
+                      <UInput placeholder="WebSocket地址 (例如: http://192.168.1.1:8080)" class="flex-1 rounded-r-none"
+                        v-model="baseUrl" :ui="{ trailing: 'pr-0.5' }" :color="isValidUrl ? 'primary' : 'error'"
+                        :variant="isValidUrl ? 'outline' : 'outline'">
                         <template v-if="baseUrl?.length" #trailing>
                           <UTooltip text="Copy to clipboard" :content="{ side: 'right' }">
                             <UButton :color="copied ? 'success' : 'neutral'" variant="link" size="sm"
@@ -143,7 +143,6 @@
   import { useWebSocket, useSessionStorage, useClipboard } from '@vueuse/core'
   import moment from 'moment';
   const config = useRuntimeConfig()
-  const wsUrl = useSessionStorage('backendUrl', config.public.wsURL + '/ws/logs');
   import { useCommonApi, useStopAllCommonApi } from '~/api'
 
   function handleBreak(type: any) {
@@ -166,62 +165,30 @@
   }
 
   // Split URL into base (IP:PORT) and path parts
-  const baseUrl = ref('')
+  const baseUrl = useSessionStorage('backendUrl', config.public.baseURL)
   const pathUrl = '/ws/logs'
   const isValidUrl = ref(true)
   const urlError = ref('')
 
   import { validateIpPort } from '~/utils'
-  // Extract base URL from full URL
-  const extractBaseUrl = (url: string) => {
-    try {
-      const urlObj = new URL(url)
-      return `${urlObj.protocol}//${urlObj.host}`
-    } catch {
-      return 'http://localhost:8080'
-    }
-  }
-
-  // Initialize baseUrl from stored wsUrl
-  baseUrl.value = extractBaseUrl(wsUrl.value || '')
 
   // Computed property to reconstruct full WebSocket URL
   const fullWsUrl = computed(() => {
-    // 如果baseUrl没有协议前缀，添加ws://
-    if (baseUrl.value && !baseUrl.value.startsWith('ws') && !baseUrl.value.startsWith('http')) {
-      return `ws://${baseUrl.value}${pathUrl}`
-    }
-    // 如果baseUrl有http前缀，转换为ws前缀
-    if (baseUrl.value && baseUrl.value.startsWith('http://')) {
+    // baseUrl现在只接受http://IP:PORT格式，转换为ws://协议
+    if (baseUrl.value) {
       return baseUrl.value.replace('http://', 'ws://') + pathUrl
     }
-    if (baseUrl.value && baseUrl.value.startsWith('https://')) {
-      return baseUrl.value.replace('https://', 'wss://') + pathUrl
-    }
-    return `${baseUrl.value}${pathUrl}`
+    return ''
   })
 
-  // Watch for changes in baseUrl and update wsUrl
+  // Watch for changes in baseUrl and validate
   watch(baseUrl, (newBaseUrl) => {
     const validation = validateIpPort(newBaseUrl || '')
     isValidUrl.value = validation.isValid
     urlError.value = validation.error
-
-    if (validation.isValid) {
-      // 如果baseUrl没有协议前缀，添加ws://
-      if (newBaseUrl && !newBaseUrl.startsWith('ws') && !newBaseUrl.startsWith('http')) {
-        wsUrl.value = `ws://${newBaseUrl}${pathUrl}`
-      } else if (newBaseUrl && newBaseUrl.startsWith('http://')) {
-        wsUrl.value = newBaseUrl.replace('http://', 'ws://') + pathUrl
-      } else if (newBaseUrl && newBaseUrl.startsWith('https://')) {
-        wsUrl.value = newBaseUrl.replace('https://', 'wss://') + pathUrl
-      } else {
-        wsUrl.value = `${newBaseUrl}${pathUrl}`
-      }
-    }
   })
   const { copy, copied } = useClipboard()
-  const { status, data, close } = useWebSocket(wsUrl, {
+  const { status, data, close } = useWebSocket(fullWsUrl, {
     heartbeat: false,
     autoReconnect: {
       retries: 1,
