@@ -308,9 +308,9 @@
 
   function showToast(message: string, title = '事件通知', color: any = "primary") {
     toast.add({
-      title,
+      title: "点击成功",
       duration: 3000,
-      description: message,
+      // description: message,
       icon: 'i-lucide-bell',
       progress: false,
       color
