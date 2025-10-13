@@ -76,52 +76,52 @@
 		if (tabType === 'interrupt-client') {
 			baseFiles.push({
 				id: `${tabType}_3`,
-				name: 'interrupt_sample.txt',
+				name: '中断样本数据.txt',
 				size: 1536,
 				uploadTime: new Date('2025-10-13T14:20:00')
 			})
 		} else if (tabType === 'scattered-data-client') {
 			baseFiles.push({
 				id: `${tabType}_3`,
-				name: 'scattered_sample.txt',
+				name: '分散数据样本.txt',
 				size: 3072,
 				uploadTime: new Date('2025-10-13T15:10:00')
 			})
 		} else if (tabType === 'multi-source-client') {
 			baseFiles.push({
 				id: `${tabType}_1`,
-				name: 'multi_source_data1.txt',
+				name: '多源数据文件1.txt',
 				size: 2048,
 				uploadTime: new Date('2025-10-13T14:30:00')
 			})
 			baseFiles.push({
 				id: `${tabType}_2`,
-				name: 'multi_source_data2.txt',
+				name: '多源数据文件2.txt',
 				size: 3072,
 				uploadTime: new Date('2025-10-13T15:15:00')
 			})
 			baseFiles.push({
 				id: `${tabType}_3`,
-				name: 'multi_source_data3.txt',
+				name: '多源数据文件3.txt',
 				size: 4096,
 				uploadTime: new Date('2025-10-13T16:30:00')
 			})
 			baseFiles.push({
 				id: `${tabType}_4`,
-				name: 'multi_source_data4.txt',
+				name: '多源数据文件4.txt',
 				size: 5120,
 				uploadTime: new Date('2025-10-13T17:45:00')
 			})
 		} else if (tabType === 'time-space-client') {
 			baseFiles.push({
 				id: `${tabType}_3`,
-				name: 'timespace_sample1.txt',
+				name: '时空数据样本1.txt',
 				size: 2560,
 				uploadTime: new Date('2025-10-13T17:45:00')
 			})
 			baseFiles.push({
 				id: `${tabType}_3`,
-				name: 'timespace_sample2.txt',
+				name: '时空数据样本2.txt',
 				size: 2560,
 				uploadTime: new Date('2025-10-13T17:45:00')
 			})
