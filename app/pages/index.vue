@@ -14,7 +14,9 @@
                 @click="() => handleBreak(item.slot)">
                 开始发送数据
               </UButton>
-              <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop">模拟中断
+              <UButton icon="i-lucide-pause" color="info" variant="outline" @click="handleOutPushStart">模拟中断并且开始外推
+              </UButton>
+              <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handlOutPush(0)">停止外推
               </UButton>
             </div>
             <!-- 文件列表区域 -->
@@ -164,19 +166,33 @@
   import { useWebSocket, useSessionStorage, useClipboard, useDebounceFn } from '@vueuse/core'
   import moment from 'moment';
   const config = useRuntimeConfig()
-  import { useCommonApi, useStopAllCommonApi } from '~/api'
+  import { useCommonApi, useStopAllCommonApi, useOutPushStartCommonApi } from '~/api'
 
   function handleBreak(type: any) {
     useCommonApi(type).then((res: any) => {
-      console.log(res.data.value)
       showToast(type)
     })
   }
 
-  function handleStop() {
+  function handleStop(cbl: any) {
     useStopAllCommonApi().then((res: any) => {
-      console.log(res.data.value)
-      showToast("", '事件停止通知', 'error')
+      showToast("", '事件停止通知', 'error');
+      if (typeof cbl === 'function') {
+        cbl();
+      }
+    })
+  }
+
+  function handleOutPushStart(number: any) {
+    handleStop(() => {
+      handlOutPush(1)
+    })
+  }
+
+  // 外推0/1
+  function handlOutPush(number: any) {
+    useOutPushStartCommonApi(number).then((res: any) => {
+      showToast("", '事件外推通知', 'info')
     })
   }
 

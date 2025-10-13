@@ -19,3 +19,12 @@ export const useStopAllCommonApi = () =>
 	useMyFetch(`/api/kafka/clients/stopAll`, {
 		method: 'POST',
 	})
+
+export const useOutPushStartCommonApi = (number: any) =>
+	useMyFetch(`/extrapolate/extrapolateSwitch`, {
+		method: 'POST',
+		body: JSON.stringify({
+			order: number,
+			predictMethod: 1
+		})
+	})
