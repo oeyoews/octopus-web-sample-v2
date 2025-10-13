@@ -8,8 +8,10 @@
         <u-tabs :items="items" variant="link" orientation="horizontal">
           <!-- <div class="mb-2"> -->
           <template #interrupt-client="{ item }">
+            <!-- 1 -->
             <div class="flex gap-2 mt-4 justify-center">
-              <UButton icon="i-lucide-play" size="lg" variant="outline" @click="() => handleBreak(item.slot)">
+              <UButton color="success" icon="i-lucide-play" size="lg" variant="outline"
+                @click="() => handleBreak(item.slot)">
                 开始发送数据
               </UButton>
               <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop">模拟中断
@@ -17,24 +19,29 @@
             </div>
           </template>
           <template #scattered-data-client="{ item }">
+            <!-- 2 -->
             <div class="flex gap-2 mt-4 justify-center">
-              <UButton icon="i-lucide-play" size="lg" variant="outline" @click="() => handleBreak(item.slot)">
+              <UButton color="info" icon="i-lucide-play" size="lg" variant="outline"
+                @click="() => handleBreak(item.slot)">
                 开始发送数据 </UButton>
               <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop">数据平滑处理
               </UButton>
             </div>
           </template>
           <template #multi-source-client="{ item }">
+            <!-- 3 -->
             <div class="flex gap-2 mt-4 justify-center">
-              <UButton icon="i-lucide-play" size="lg" variant="outline" @click="handleBreak(item.slot)">
+              <UButton color="error" icon="i-lucide-play" size="lg" variant="outline" @click="handleBreak(item.slot)">
                 开始发送数据 </UButton>
               <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop">数据融合处理
               </UButton>
             </div>
           </template>
           <template #time-space-client="{ item }">
+            <!-- 4 -->
             <div class="flex gap-2 mt-4 justify-center">
-              <UButton icon="i-lucide-play" size="lg" variant="outline" @click="() => handleBreak(item.slot)">
+              <UButton color="warning" icon="i-lucide-play" size="lg" variant="outline"
+                @click="() => handleBreak(item.slot)">
                 开始发送数据
               </UButton>
               <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop">时空数据标准化
@@ -107,17 +114,20 @@
           </div>
           <div v-else class="log-list">
             <div v-for="(log, index) in cacheDebugLogs.map(parseLog)" :key="index" class="log-item log-success" :class="{
-              'log-success': log.message.startsWith('✅'),
-              'log-cache': log.message.startsWith('🎯'),
-              'log-error': log.message.startsWith('xx')
+              'log-success': log.message.startsWith('中断'),
+              'log-cache': log.message.startsWith('散值'),
+              'log-error': log.message.startsWith('多数据'),
+              'log-warning': log.message.startsWith('时空')
             }">
-              <div class="text-cyan-400 mr-2">
-                [{{ moment(log.timestamp).format('YYYY-MM-DD HH:mm:ss') }}]
+              <div class="mr-2 font-bold mb-1" :class="{
+                'text-green-500/80': log.message.startsWith('中断'),
+                'text-cyan-500/80': log.message.startsWith('散值'),
+                'text-red-500/80': log.message.startsWith('多数据'),
+                'text-yellow-500/80': log.message.startsWith('时空')
+              }">
+                [{{ log.timestamp }}] {{ log.message }}
               </div>
-              <div class="font-bold text-green-400 mr-2">
-                {{ log.message }}
-              </div>
-              {{ log.data }}
+              {{ JSON.stringify(log.data) }}
             </div>
           </div>
         </div>
@@ -223,7 +233,12 @@
   })
 
   function parseLog(log: string): Log {
-    return JSON.parse(log);
+    return JSON.parse(log, (key, value) => {
+      if (key === 'timestamp') {
+        return moment(value).format('YYYY-MM-DD HH:mm:ss')
+      }
+      return value
+    });
   }
 
   const logsContainer = ref<HTMLElement>()

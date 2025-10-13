@@ -117,6 +117,10 @@
           background: rgb(245 108 108 / 10%);
           border-left-color: rgb(245 108 108);
         }
+        &.log-warning {
+          background: rgb(250 204 21 / 10%);
+          border-left-color: rgb(250 204 21);
+        }
       }
     }
   }
