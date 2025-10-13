@@ -41,7 +41,7 @@
             <div class="flex gap-2 mt-4 justify-center">
               <UButton color="error" icon="i-lucide-play" size="lg" variant="outline" @click="handleBreak(item.slot)">
                 开始发送数据 </UButton>
-              <UButton icon="i-lucide-pause" color="error" variant="outline" @click="handleStop">数据融合处理
+              <UButton icon="i-lucide-pause" color="info" variant="outline" @click="handleStop">数据融合处理
               </UButton>
             </div>
             <!-- 文件列表区域 -->

@@ -25,14 +25,14 @@
 				</div>
 				<!-- right -->
 				<div class="flex items-center gap-2">
-					<UTooltip text="下载文件">
+					<!-- <UTooltip text="下载文件">
 						<UButton icon="i-lucide-download" color="primary" variant="ghost" size="sm"
 							@click="downloadFile(file)" />
-					</UTooltip>
-					<UTooltip text="删除文件">
+					</UTooltip> -->
+					<!-- <UTooltip text="删除文件">
 						<UButton icon="i-lucide-trash-2" color="error" variant="ghost" size="sm"
 							@click="deleteFile(file.id)" />
-					</UTooltip>
+					</UTooltip> -->
 				</div>
 			</div>
 		</UCard>
