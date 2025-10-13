@@ -221,7 +221,10 @@
   const scrollToBottom = () => {
     nextTick(() => {
       if (logsContainer.value) {
-        logsContainer.value.scrollTop = logsContainer.value.scrollHeight
+        logsContainer.value.scrollTo({
+          top: logsContainer.value.scrollHeight,
+          behavior: 'smooth'
+        })
       }
     })
   }
