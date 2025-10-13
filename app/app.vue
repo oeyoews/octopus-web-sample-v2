@@ -14,7 +14,7 @@
         // 延迟一点时间再隐藏loading
         setTimeout(() => {
           isLoading.value = false
-        }, 500)
+        }, 100)
       }
     }, 100)
   })

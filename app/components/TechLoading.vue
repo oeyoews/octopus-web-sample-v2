@@ -74,7 +74,6 @@
 		'准备就绪'
 	]
 
-	const currentTextIndex = ref(0)
 	const loadingText = computed(() => {
 		if (props.progress < 20) return loadingTexts[0]
 		if (props.progress < 40) return loadingTexts[1]

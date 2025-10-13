@@ -78,46 +78,52 @@
 				id: `${tabType}_3`,
 				name: 'interrupt_sample.txt',
 				size: 1536,
-				uploadTime: new Date('2024-01-15T14:20:00')
+				uploadTime: new Date('2025-10-13T14:20:00')
 			})
 		} else if (tabType === 'scattered-data-client') {
 			baseFiles.push({
 				id: `${tabType}_3`,
 				name: 'scattered_sample.txt',
 				size: 3072,
-				uploadTime: new Date('2024-01-15T15:10:00')
+				uploadTime: new Date('2025-10-13T15:10:00')
 			})
 		} else if (tabType === 'multi-source-client') {
 			baseFiles.push({
 				id: `${tabType}_1`,
 				name: 'multi_source_data1.txt',
 				size: 2048,
-				uploadTime: new Date('2024-01-15T14:30:00')
+				uploadTime: new Date('2025-10-13T14:30:00')
 			})
 			baseFiles.push({
 				id: `${tabType}_2`,
 				name: 'multi_source_data2.txt',
 				size: 3072,
-				uploadTime: new Date('2024-01-15T15:15:00')
+				uploadTime: new Date('2025-10-13T15:15:00')
 			})
 			baseFiles.push({
 				id: `${tabType}_3`,
 				name: 'multi_source_data3.txt',
 				size: 4096,
-				uploadTime: new Date('2024-01-15T16:30:00')
+				uploadTime: new Date('2025-10-13T16:30:00')
 			})
 			baseFiles.push({
 				id: `${tabType}_4`,
 				name: 'multi_source_data4.txt',
 				size: 5120,
-				uploadTime: new Date('2024-01-15T17:45:00')
+				uploadTime: new Date('2025-10-13T17:45:00')
 			})
 		} else if (tabType === 'time-space-client') {
 			baseFiles.push({
 				id: `${tabType}_3`,
-				name: 'timespace_sample.txt',
+				name: 'timespace_sample1.txt',
 				size: 2560,
-				uploadTime: new Date('2024-01-15T17:45:00')
+				uploadTime: new Date('2025-10-13T17:45:00')
+			})
+			baseFiles.push({
+				id: `${tabType}_3`,
+				name: 'timespace_sample2.txt',
+				size: 2560,
+				uploadTime: new Date('2025-10-13T17:45:00')
 			})
 		}
 
@@ -142,10 +148,10 @@
 	}
 
 	// 删除文件
-	const deleteFile = (fileId: string) => {
-		files.value = files.value.filter(file => file.id !== fileId)
-		showToast('文件删除成功', '删除通知', 'success')
-	}
+	// const deleteFile = (fileId: string) => {
+	// 	files.value = files.value.filter(file => file.id !== fileId)
+	// 	showToast('文件删除成功', '删除通知', 'success')
+	// }
 
 	// 格式化文件大小
 	const formatFileSize = (bytes: number): string => {
