@@ -81,21 +81,21 @@
               </UButton>
             </div>
             <div class="flex items-center gap-2">
+              <UTooltip text="显示/隐藏日志">
+                <UButton color="primary" :icon="isLogVisible ? 'i-lucide-chevron-up' : 'i-lucide-chevron-down'"
+                  variant="ghost" @click="toggleLogVisibility" />
+              </UTooltip>
               <UTooltip text="清空日志" v-if="isLogVisible && cacheDebugLogs.length > 0">
                 <UButton color="error" icon="i-lucide-x" variant="ghost" @click="clearLogList" />
               </UTooltip>
               <UTooltip :text="autoScrollEnabled ? '关闭自动滚动' : '开启自动滚动'">
-                <UButton :color="autoScrollEnabled ? 'success' : 'warning'"
+                <UButton :color="autoScrollEnabled ? 'primary' : 'warning'"
                   :icon="autoScrollEnabled ? 'i-lucide-scroll-text' : 'i-lucide-scroll'" variant="ghost"
                   @click="autoScrollEnabled = !autoScrollEnabled" />
               </UTooltip>
-              <UTooltip text="显示/隐藏日志">
-                <UButton color="info" :icon="isLogVisible ? 'i-lucide-chevron-up' : 'i-lucide-chevron-down'"
-                  variant="ghost" @click="toggleLogVisibility" />
-              </UTooltip>
               <UModal title="系统配置">
                 <UTooltip text="系统配置">
-                  <UButton icon="i-lucide-settings" color='success' variant="ghost">
+                  <UButton icon="i-lucide-settings" color='primary' variant="ghost">
                   </UButton>
                 </UTooltip>
                 <template #body>

@@ -15,7 +15,7 @@
 				class="flex items-center justify-between p-2 border-b border-gray-200 dark:border-gray-700 last:border-b-0">
 				<!-- left -->
 				<div class="flex items-center gap-3 ml-4">
-					<UIcon name="i-lucide-file-text" class="size-5 text-blue-500" />
+					<UIcon mode="svg" name="i-lucide-file-text" class="size-5 text-cyan-500" />
 					<div>
 						<p class="font-medium text-gray-900 dark:text-gray-100">{{ file.name }}</p>
 						<p class="text-sm text-gray-500 dark:text-gray-400">
