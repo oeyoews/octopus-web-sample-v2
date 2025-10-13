@@ -150,7 +150,7 @@
               }">
                 [{{ log.timestamp }}] {{ log.message }}
               </div>
-              {{ JSON.stringify(log.data) }}
+              {{ log.data }}
             </div>
           </div>
         </div>
