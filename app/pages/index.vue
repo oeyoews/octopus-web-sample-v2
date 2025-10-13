@@ -114,16 +114,16 @@
           </div>
           <div v-else class="log-list">
             <div v-for="(log, index) in cacheDebugLogs.map(parseLog)" :key="index" class="log-item log-success" :class="{
-              'log-success': log.message.startsWith('中断'),
-              'log-cache': log.message.startsWith('散值'),
-              'log-error': log.message.startsWith('多数据'),
-              'log-warning': log.message.startsWith('时空')
+              'log-success': log.message?.startsWith('中断'),
+              'log-cache': log.message?.startsWith('散值'),
+              'log-error': log.message?.startsWith('多数据'),
+              'log-warning': log.message?.startsWith('时空')
             }">
               <div class="mr-2 font-bold mb-1" :class="{
-                'text-green-500/80': log.message.startsWith('中断'),
-                'text-cyan-500/80': log.message.startsWith('散值'),
-                'text-red-500/80': log.message.startsWith('多数据'),
-                'text-yellow-500/80': log.message.startsWith('时空')
+                'text-green-500/80': log.message?.startsWith('中断'),
+                'text-cyan-500/80': log.message?.startsWith('散值'),
+                'text-red-500/80': log.message?.startsWith('多数据'),
+                'text-yellow-500/80': log.message?.startsWith('时空')
               }">
                 [{{ log.timestamp }}] {{ log.message }}
               </div>
