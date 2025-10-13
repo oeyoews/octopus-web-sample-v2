@@ -66,6 +66,11 @@
               <UTooltip text="清空日志" v-if="isLogVisible && cacheDebugLogs.length > 0">
                 <UButton color="error" icon="i-lucide-x" variant="ghost" @click="clearLogList" />
               </UTooltip>
+              <UTooltip :text="autoScrollEnabled ? '关闭自动滚动' : '开启自动滚动'">
+                <UButton :color="autoScrollEnabled ? 'success' : 'warning'"
+                  :icon="autoScrollEnabled ? 'i-lucide-scroll-text' : 'i-lucide-scroll'" variant="ghost"
+                  @click="autoScrollEnabled = !autoScrollEnabled" />
+              </UTooltip>
               <UTooltip text="显示/隐藏日志">
                 <UButton color="info" :icon="isLogVisible ? 'i-lucide-chevron-up' : 'i-lucide-chevron-down'"
                   variant="ghost" @click="toggleLogVisibility" />
@@ -107,7 +112,7 @@
             </div>
           </div>
         </template>
-        <div v-if="isLogVisible" class="logs-container p-4" ref="logsContainer" @scroll="handleUserScroll">
+        <div v-if="isLogVisible" class="logs-container p-4" ref="logsContainer">
           <div v-if="cacheDebugLogs.length === 0" class="empty-logs">
             <!-- nothing ... -->
             暂无日志
@@ -211,7 +216,7 @@
   const logsContainer = ref<HTMLElement>()
   const cacheDebugLogs = ref<string[]>([]);
   const isLogVisible = ref(true);
-  const isUserScrolling = ref(false);
+  const autoScrollEnabled = useSessionStorage('autoScrollEnabled', true);
 
   // 切换日志显示/隐藏
   const toggleLogVisibility = () => {
@@ -220,13 +225,13 @@
 
   // 滚动到底部的核心函数
   const scrollToBottomCore = () => {
-    // 如果用户正在手动滚动，不执行自动滚动
-    if (isUserScrolling.value) {
+    // 如果自动滚动被禁用，不执行滚动
+    if (!autoScrollEnabled.value) {
       return
     }
 
     nextTick(() => {
-      if (logsContainer.value && !isUserScrolling.value) {
+      if (logsContainer.value && autoScrollEnabled.value) {
         logsContainer.value.scrollTo({
           top: logsContainer.value.scrollHeight,
           behavior: 'smooth'
@@ -238,15 +243,6 @@
   // 使用VueUse的防抖函数
   const scrollToBottom = useDebounceFn(scrollToBottomCore, 150)
 
-  // 监听用户滚动行为
-  const handleUserScroll = () => {
-    isUserScrolling.value = true
-
-    // 重置用户滚动状态
-    setTimeout(() => {
-      isUserScrolling.value = false
-    }, 1000) // 1秒后重置
-  }
 
   watch(data, (newData) => {
     // console.log(JSON.parse(newData).data);
