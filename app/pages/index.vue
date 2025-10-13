@@ -107,7 +107,7 @@
             </div>
           </div>
         </template>
-        <div v-if="isLogVisible" class="logs-container p-4" ref="logsContainer">
+        <div v-if="isLogVisible" class="logs-container p-4" ref="logsContainer" @scroll="handleUserScroll">
           <div v-if="cacheDebugLogs.length === 0" class="empty-logs">
             <!-- nothing ... -->
             暂无日志
@@ -140,7 +140,7 @@
 </template>
 
 <script setup lang="ts">
-  import { useWebSocket, useSessionStorage, useClipboard } from '@vueuse/core'
+  import { useWebSocket, useSessionStorage, useClipboard, useDebounceFn } from '@vueuse/core'
   import moment from 'moment';
   const config = useRuntimeConfig()
   import { useCommonApi, useStopAllCommonApi } from '~/api'
@@ -211,22 +211,41 @@
   const logsContainer = ref<HTMLElement>()
   const cacheDebugLogs = ref<string[]>([]);
   const isLogVisible = ref(true);
+  const isUserScrolling = ref(false);
 
   // 切换日志显示/隐藏
   const toggleLogVisibility = () => {
     isLogVisible.value = !isLogVisible.value;
   }
 
-  // 自动滚动到底部的函数
-  const scrollToBottom = () => {
+  // 滚动到底部的核心函数
+  const scrollToBottomCore = () => {
+    // 如果用户正在手动滚动，不执行自动滚动
+    if (isUserScrolling.value) {
+      return
+    }
+
     nextTick(() => {
-      if (logsContainer.value) {
+      if (logsContainer.value && !isUserScrolling.value) {
         logsContainer.value.scrollTo({
           top: logsContainer.value.scrollHeight,
           behavior: 'smooth'
         })
       }
     })
+  }
+
+  // 使用VueUse的防抖函数
+  const scrollToBottom = useDebounceFn(scrollToBottomCore, 150)
+
+  // 监听用户滚动行为
+  const handleUserScroll = () => {
+    isUserScrolling.value = true
+
+    // 重置用户滚动状态
+    setTimeout(() => {
+      isUserScrolling.value = false
+    }, 1000) // 1秒后重置
   }
 
   watch(data, (newData) => {
