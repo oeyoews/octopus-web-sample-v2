@@ -20,6 +20,9 @@ importers:
       '@tailwindcss/vite':
         specifier: ^4.1.12
         version: 4.1.12(vite@7.1.9(@types/node@24.3.0)(jiti@2.6.1)(lightningcss@1.30.1)(terser@5.43.1)(yaml@2.8.1))
+      baklavajs:
+        specifier: ^2.8.0
+        version: 2.8.0
       echarts:
         specifier: ^5.6.0
         version: 5.6.0
@@ -209,6 +212,24 @@ packages:
   '@babel/types@7.28.4':
     resolution: {integrity: sha512-bkFqkLhh3pMBUQQkpVgWDWq/lqzc2678eUyDlTBhRqhCHFguYYGM0Efga7tYk4TogG/3x0EEl66/OQ+WGbWB/Q==}
     engines: {node: '>=6.9.0'}
+
+  '@baklavajs/core@2.8.0':
+    resolution: {integrity: sha512-1krpd+expF0gOtLENJLsTMrFktOmFHo9FFSwTyYamWc2bRL8giSDCPWx0UK4l9OObG+984FdurEnw0JdbMexrw==}
+
+  '@baklavajs/engine@2.8.0':
+    resolution: {integrity: sha512-Md7l8pHoswt6yMp7A52HdhmtUIk7wQ92nQ0NVOXva7wdkv2LcQg7jYGwYRgLSFBmRBMSkC/g12xxbYOV+tia0g==}
+
+  '@baklavajs/events@2.8.0':
+    resolution: {integrity: sha512-dPl2Z8p7o9HwEOd3TclnHMQTSCuGyUcHyzAxijuQI13LTWUMbtyHl1yBMH5wuy+yUsR6/NQnH//4+rDCyiFoJw==}
+
+  '@baklavajs/interface-types@2.8.0':
+    resolution: {integrity: sha512-6NDtlqx/oijJEYC6IdXyZ+EesCtDug1jjyhD0UmeXiRFbNzwDuuIyM8C06/Mn/p0Fcqc52NRUQILgJMDMS4sXQ==}
+
+  '@baklavajs/renderer-vue@2.8.0':
+    resolution: {integrity: sha512-TwtJ6g6sPSjyWH/UcKAD+Yb/VXUs+1hwm4bkSeZkuAb/CzlQYL4qqhJPJbfBw5hygZjPRU3VB8jBmgStNe2iYQ==}
+
+  '@baklavajs/themes@2.8.0':
+    resolution: {integrity: sha512-RP2VVyoVEoBoC9fvm3Xup3+iEAXUpamWuR9xfOMjqZBkd9TBuzWPSsExMeV8VhBddo/WS2NccsVOEdBH1DzJ1Q==}
 
   '@capsizecss/metrics@3.5.0':
     resolution: {integrity: sha512-Ju2I/Qn3c1OaU8FgeW4Tc22D4C9NwyVfKzNmzst59bvxBjPoLYNZMqFYn+HvCtn4MpXwiaDtCE8fNuQLpdi9yA==}
@@ -1741,6 +1762,9 @@ packages:
 
   b4a@1.6.7:
     resolution: {integrity: sha512-OnAYlL5b7LEkALw87fUVafQw5rVR9RjwGd4KUwNQ6DrrNmaVaUCgLipfVlzrPQ4tWOR9P0IXGNOx50jYCCdSJg==}
+
+  baklavajs@2.8.0:
+    resolution: {integrity: sha512-T3bG2QcH5uPFu400XF9vw8Y7C1FIp74YSTHLKud6aBJefTI54jkuJRCfbcmZoxDRYadV/oaZWp/n5kQX5jNImg==}
 
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
@@ -3939,6 +3963,10 @@ packages:
     resolution: {integrity: sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A==}
     hasBin: true
 
+  uuid@13.0.0:
+    resolution: {integrity: sha512-XQegIaBTVUjSHliKqcnFqYypAd4S+WCYt5NIeRs6w/UAry7z8Y9j5ZwRRL4kzq9U3sD6v+85er9FvkEaBpji2w==}
+    hasBin: true
+
   vaul-vue@0.4.1:
     resolution: {integrity: sha512-A6jOWOZX5yvyo1qMn7IveoWN91mJI5L3BUKsIwkg6qrTGgHs1Sb1JF/vyLJgnbN1rH4OOOxFbtqL9A46bOyGUQ==}
     peerDependencies:
@@ -4401,6 +4429,31 @@ snapshots:
     dependencies:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.27.1
+
+  '@baklavajs/core@2.8.0':
+    dependencies:
+      '@baklavajs/events': 2.8.0
+      uuid: 13.0.0
+
+  '@baklavajs/engine@2.8.0':
+    dependencies:
+      '@baklavajs/core': 2.8.0
+      '@baklavajs/events': 2.8.0
+
+  '@baklavajs/events@2.8.0': {}
+
+  '@baklavajs/interface-types@2.8.0':
+    dependencies:
+      '@baklavajs/core': 2.8.0
+      '@baklavajs/engine': 2.8.0
+      '@baklavajs/renderer-vue': 2.8.0
+
+  '@baklavajs/renderer-vue@2.8.0':
+    dependencies:
+      '@baklavajs/core': 2.8.0
+      '@baklavajs/events': 2.8.0
+
+  '@baklavajs/themes@2.8.0': {}
 
   '@capsizecss/metrics@3.5.0': {}
 
@@ -6021,6 +6074,14 @@ snapshots:
       postcss-value-parser: 4.2.0
 
   b4a@1.6.7: {}
+
+  baklavajs@2.8.0:
+    dependencies:
+      '@baklavajs/core': 2.8.0
+      '@baklavajs/engine': 2.8.0
+      '@baklavajs/interface-types': 2.8.0
+      '@baklavajs/renderer-vue': 2.8.0
+      '@baklavajs/themes': 2.8.0
 
   balanced-match@1.0.2: {}
 
@@ -8433,6 +8494,8 @@ snapshots:
 
   uuid@11.1.0:
     optional: true
+
+  uuid@13.0.0: {}
 
   vaul-vue@0.4.1(reka-ui@2.5.1(typescript@5.9.2)(vue@3.5.22(typescript@5.9.2)))(vue@3.5.22(typescript@5.9.2)):
     dependencies:

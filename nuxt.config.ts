@@ -85,7 +85,8 @@ export default defineNuxtConfig({
     optimizeDeps: {
       include: [
         "@vueuse/core",
-        "moment"
+        "moment",
+        "baklavajs"
       ]
     }
     // build: { }
