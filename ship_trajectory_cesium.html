@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>船只作战运动轨迹 - Cesium可视化</title>
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.111/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.111/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div id="cesiumContainer" class="w-full m-0 p-0 overflow-hidden h-screen"></div>
+
+    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-lg z-[1001] font-chinese" id="loadingIndicator">
+        正在加载轨迹数据...
+    </div>
+
+    <script>
+        // 全局变量
+        let viewer;
+        let trajectoryData = [];
+        let shipEntity;
+        let trajectoryEntity;
+        let pointEntities = [];
+        let isPlaying = false;
+        let currentIndex = 0;
+        let animationSpeed = 1.0;
+        let animationId;
+
+        // 初始化Cesium
+        async function initCesium() {
+            // 设置Cesium访问令牌（您需要替换为您自己的令牌）
+            Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJiNjBjYjEzYS02Nzg0LTQ0MWUtYTBkOS1mZjRiYWM1MmJhOTciLCJpZCI6MjY1NTM5LCJpYXQiOjE3NjA1MjAzMTd9.AeBLlQDX2LuRev9h0p8e76atMZVeXRvNev3fGPN3dBI';
+
+            // 创建地形提供者
+            let terrainProvider;
+            try {
+                terrainProvider = await Cesium.createWorldTerrainAsync({
+                    requestWaterMask: true,
+                    requestVertexNormals: true
+                });
+            } catch (error) {
+                console.warn('无法创建世界地形，使用默认地形:', error);
+                terrainProvider = new Cesium.EllipsoidTerrainProvider();
+            }
+
+            viewer = new Cesium.Viewer('cesiumContainer', {
+                terrainProvider: terrainProvider,
+                timeline: false,
+                animation: false,
+                homeButton: false,
+                sceneModePicker: false,
+                baseLayerPicker: false,
+                navigationHelpButton: false,
+                fullscreenButton: false,
+                vrButton: false
+            });
+
+            // 设置初始视角
+            viewer.camera.setView({
+                destination: Cesium.Cartesian3.fromDegrees(130.15, 28.16, 10000),
+                orientation: {
+                    heading: Cesium.Math.toRadians(0),
+                    pitch: Cesium.Math.toRadians(-45),
+                    roll: 0.0
+                }
+            });
+
+            // 启用深度测试
+            viewer.scene.globe.depthTestAgainstTerrain = true;
+        }
+
+        // 加载轨迹数据
+        async function loadTrajectoryData() {
+            try {
+                const response = await fetch('ship_trajectory_data.txt');
+                // const response = await fetch('ship_trajectory_segment_4.txt');
+                const text = await response.text();
+
+                const lines = text.split('\n');
+                trajectoryData = [];
+
+                // 跳过标题行，解析数据
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (line) {
+                        const parts = line.split('\t');
+                        if (parts.length >= 6) {
+                            trajectoryData.push({
+                                timestamp: parts[0],
+                                batchNumber: parseInt(parts[1]),
+                                longitude: parseFloat(parts[2]),
+                                latitude: parseFloat(parts[3]),
+                                depth: parseInt(parts[4]),
+                                heading: parseInt(parts[5])
+                            });
+                        }
+                    }
+                }
+
+                console.log(`加载了 ${trajectoryData.length} 个轨迹点`);
+                return trajectoryData;
+            } catch (error) {
+                console.error('加载轨迹数据失败:', error);
+                // 如果无法加载文件，使用示例数据
+                // return generateSampleData();
+            }
+        }
+
+        // 创建船只实体
+        function createShipEntity(position, heading) {
+            if (shipEntity) {
+                viewer.entities.remove(shipEntity);
+            }
+
+            shipEntity = viewer.entities.add({
+                position: position,
+                model: {
+                    uri: 'https://cesium.com/downloads/cesiumjs/releases/1.111/Build/Cesium/Apps/SampleData/models/CesiumMilkTruck/CesiumMilkTruck.glb',
+                    scale: 0.5,
+                    minimumPixelSize: 64,
+                    maximumScale: 20000
+                },
+                orientation: Cesium.Transforms.headingPitchRollQuaternion(
+                    position,
+                    new Cesium.HeadingPitchRoll(Cesium.Math.toRadians(heading), 0, 0)
+                ),
+                label: {
+                    text: '🚢 作战船只',
+                    font: '12pt sans-serif',
+                    fillColor: Cesium.Color.WHITE,
+                    outlineColor: Cesium.Color.BLACK,
+                    outlineWidth: 2,
+                    style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+                    pixelOffset: new Cesium.Cartesian2(0, -50),
+                    horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
+                    verticalOrigin: Cesium.VerticalOrigin.BOTTOM
+                }
+            });
+
+            return shipEntity;
+        }
+
+        // 创建轨迹线
+        function createTrajectoryLine() {
+            if (trajectoryEntity) {
+                viewer.entities.remove(trajectoryEntity);
+            }
+
+            const positions = trajectoryData.map(point =>
+                Cesium.Cartesian3.fromDegrees(point.longitude, point.latitude, -point.depth)
+            );
+
+            trajectoryEntity = viewer.entities.add({
+                polyline: {
+                    positions: positions,
+                    width: 3,
+                    material: Cesium.Color.CYAN,
+                    clampToGround: false,
+                    depthFailMaterial: Cesium.Color.RED
+                }
+            });
+
+            return trajectoryEntity;
+        }
+
+        // 创建轨迹点
+        function createTrajectoryPoints() {
+            // 清除现有点
+            pointEntities.forEach(entity => viewer.entities.remove(entity));
+            pointEntities = [];
+
+            // 创建关键点（每10个点显示一个）
+            for (let i = 0; i < trajectoryData.length; i += 10) {
+                const point = trajectoryData[i];
+                const position = Cesium.Cartesian3.fromDegrees(
+                    point.longitude,
+                    point.latitude,
+                    -point.depth
+                );
+
+                const pointEntity = viewer.entities.add({
+                    position: position,
+                    point: {
+                        pixelSize: 8,
+                        color: Cesium.Color.YELLOW,
+                        outlineColor: Cesium.Color.BLACK,
+                        outlineWidth: 2,
+                        heightReference: Cesium.HeightReference.NONE
+                    },
+                    label: {
+                        text: `${i + 1}`,
+                        font: '10pt sans-serif',
+                        fillColor: Cesium.Color.WHITE,
+                        outlineColor: Cesium.Color.BLACK,
+                        outlineWidth: 1,
+                        pixelOffset: new Cesium.Cartesian2(0, -20),
+                        horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
+                        verticalOrigin: Cesium.VerticalOrigin.BOTTOM
+                    }
+                });
+
+                pointEntities.push(pointEntity);
+            }
+        }
+
+        // 更新船只位置
+        function updateShipPosition(index) {
+            if (index >= trajectoryData.length) return;
+
+            const point = trajectoryData[index];
+            const position = Cesium.Cartesian3.fromDegrees(
+                point.longitude,
+                point.latitude,
+                -point.depth
+            );
+
+            // 更新船只位置和方向
+            if (shipEntity) {
+                shipEntity.position = position;
+                shipEntity.orientation = Cesium.Transforms.headingPitchRollQuaternion(
+                    position,
+                    new Cesium.Transforms.HeadingPitchRoll(Cesium.Math.toRadians(point.heading), 0, 0)
+                );
+            } else {
+                createShipEntity(position, point.heading);
+            }
+        }
+
+        // 主初始化函数
+        async function init() {
+            try {
+                // 初始化Cesium（异步）
+                await initCesium();
+
+                // 隐藏加载指示器
+                document.getElementById('loadingIndicator').style.display = 'none';
+
+                // 加载轨迹数据
+                await loadTrajectoryData();
+
+                // 创建可视化元素
+                createTrajectoryLine();
+                createTrajectoryPoints();
+
+                // 设置初始船只位置
+                updateShipPosition(0);
+
+                console.log('船只轨迹可视化初始化完成');
+
+            } catch (error) {
+                console.error('初始化失败:', error);
+                document.getElementById('loadingIndicator').textContent = '初始化失败: ' + error.message;
+            }
+        }
+
+        // 页面加载完成后初始化
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
