@@ -79,6 +79,9 @@ export default defineNuxtConfig({
     plugins: [
       tailwindcss(),
     ],
+    server: {
+      allowedHosts: ['07c4dfb64488.ngrok-free.app'],
+    },
     optimizeDeps: {
       include: [
         "@vueuse/core",
